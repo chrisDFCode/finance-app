@@ -131,7 +131,7 @@ export default function FinanceDesignDashboard() {
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex items-center gap-3 mb-8">
-          <img src="/barya-logo.png" alt="Barya Logo" className="h-12 w-12 object-contain" />
+          <img src="/barya-logo.png" alt="Barya Logo" className="h-[100px] w-[100px] object-contain" />
           <div>
             <h1 className="text-3xl font-semibold">Barya</h1>
             <p className="text-gray-600 text-sm">Track and manage your expenses</p>
