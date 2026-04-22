@@ -11,7 +11,7 @@ function StatsSection({ expenses, loading }) {
 
   return (
     <SimpleGrid columns={{ base: 1 }} spacing={4}>
-      <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" p={6} borderRadius="md" color="white">
+      <Box bg="linear-gradient(135deg, #0d5a33 0%, #0b3f25 100%)" p={6} borderRadius="md" border="1px solid" borderColor="#1c8f55" color="white">
         <Stat>
           <StatLabel fontSize="md" opacity={0.9}>Total Spending</StatLabel>
           <StatNumber fontSize="3xl" fontWeight="bold">{formatCurrency(total)}</StatNumber>
@@ -19,7 +19,7 @@ function StatsSection({ expenses, loading }) {
         </Stat>
       </Box>
 
-      <Box bg="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" p={6} borderRadius="md" color="white">
+      <Box bg="linear-gradient(135deg, #133124 0%, #0c2219 100%)" p={6} borderRadius="md" border="1px solid" borderColor="#246a47" color="#f2e07a">
         <Stat>
           <StatLabel fontSize="md" opacity={0.9}>Average Per Transaction</StatLabel>
           <StatNumber fontSize="3xl" fontWeight="bold">
@@ -30,7 +30,7 @@ function StatsSection({ expenses, loading }) {
         </Stat>
       </Box>
 
-      <Box bg="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" p={6} borderRadius="md" color="white">
+      <Box bg="linear-gradient(135deg, #2f2a11 0%, #1f1b0d 100%)" p={6} borderRadius="md" border="1px solid" borderColor="#5f5530" color="#f2e07a">
         <Stat>
           <StatLabel fontSize="md" opacity={0.9}>Total Transactions</StatLabel>
           <StatNumber fontSize="3xl" fontWeight="bold">{expenses.length}</StatNumber>

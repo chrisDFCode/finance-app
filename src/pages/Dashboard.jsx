@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Container, Heading, Text, Alert, CloseButton, SimpleGrid, Spinner, Center } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, Alert, CloseButton, SimpleGrid, Spinner, Center, HStack, Image } from '@chakra-ui/react';
 import AddExpenseForm from '../components/AddExpenseForm';
 import ExpenseTable from '../components/ExpenseTable';
 import CategoryFilter from '../components/CategoryFilter';
@@ -68,12 +68,30 @@ function Dashboard() {
     : expenses.filter(exp => exp.category === selectedCategory);
 
   return (
-    <Box minH="100vh" bg="gray.50">
+    <Box minH="100vh" bg="#040806">
       {/* Header */}
-      <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" color="white" py={8} mb={8}>
+      <Box
+        bg="linear-gradient(130deg, #03140b 0%, #0b2f1b 50%, #06110b 100%)"
+        borderBottom="1px solid"
+        borderColor="#196a3d"
+        color="#f2e07a"
+        py={8}
+        mb={8}
+      >
         <Container maxW="1200px">
-          <Heading as="h1" size="2xl">Finance Tracker</Heading>
-          <Text fontSize="lg" mt={2} opacity={0.9}>Track and Manage your expenses</Text>
+          <HStack spacing={4} align="center">
+            <Image
+              src="/barya-logo.png"
+              alt="Barya logo"
+              boxSize={{ base: '52px', md: '64px' }}
+              objectFit="contain"
+              fallbackSrc=""
+            />
+            <Box>
+              <Heading as="h1" size="2xl" letterSpacing="wider">BARYA Finance</Heading>
+              <Text fontSize="lg" mt={2} color="#b9c8bd">Track and manage your expenses</Text>
+            </Box>
+          </HStack>
         </Container>
       </Box>
 
@@ -81,7 +99,7 @@ function Dashboard() {
       <Container maxW="1200px" pb={10}>
         {/* Error Alert */}
         {error && (
-          <Alert status="error" mb={6} borderRadius="md">
+          <Alert status="error" mb={6} borderRadius="md" bg="#3a0f0f" color="#ffd7d7" border="1px solid" borderColor="#6d1f1f">
             {error}
             <CloseButton ml="auto" onClick={() => setError(null)} />
           </Alert>
@@ -135,8 +153,8 @@ function Dashboard() {
       </Container>
 
       {/* Footer */}
-      <Box bg="gray.200" py={4} mt={10} textAlign="center">
-        <Text>&copy; 2024 Finance Tracker. Built with React & Supabase.</Text>
+      <Box bg="#07130d" borderTop="1px solid" borderColor="#165d37" py={4} mt={10} textAlign="center">
+        <Text color="#8fa395">&copy; 2026 Barya Finance. Built with React & Supabase.</Text>
       </Box>
     </Box>
   );

@@ -34,6 +34,9 @@ function ChartComponent({ expenses }) {
     plugins: {
       legend: {
         position: 'bottom',
+        labels: {
+          color: '#c6d4cb',
+        }
       },
       tooltip: {
         callbacks: {
@@ -46,10 +49,22 @@ function ChartComponent({ expenses }) {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(185, 200, 189, 0.2)'
+        },
         ticks: {
+          color: '#9cb1a2',
           callback: function(value) {
             return '$' + value.toFixed(2);
           }
+        }
+      },
+      x: {
+        grid: {
+          color: 'rgba(185, 200, 189, 0.1)'
+        },
+        ticks: {
+          color: '#9cb1a2'
         }
       }
     }
@@ -61,6 +76,9 @@ function ChartComponent({ expenses }) {
     plugins: {
       legend: {
         position: 'right',
+        labels: {
+          color: '#c6d4cb',
+        }
       },
       tooltip: {
         callbacks: {
@@ -75,20 +93,20 @@ function ChartComponent({ expenses }) {
   if (categories.length === 0) {
     return (
       <Center py={10}>
-        <Text color="gray.500" fontSize="lg">No data to display. Add expenses to see charts.</Text>
+        <Text color="#8fa395" fontSize="lg">No data to display. Add expenses to see charts.</Text>
       </Center>
     );
   }
 
   return (
     <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-      <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
-        <Heading as="h3" size="md" mb={4}>Spending by Category (Bar Chart)</Heading>
+      <Box bg="#07130d" p={6} borderRadius="md" border="1px solid" borderColor="#165d37" boxShadow="0 12px 26px rgba(0,0,0,0.35)">
+        <Heading as="h3" size="md" mb={4} color="#f2e07a">Spending by Category (Bar Chart)</Heading>
         <Bar data={chartData} options={chartOptions} />
       </Box>
 
-      <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
-        <Heading as="h3" size="md" mb={4}>Spending Distribution (Doughnut Chart)</Heading>
+      <Box bg="#07130d" p={6} borderRadius="md" border="1px solid" borderColor="#165d37" boxShadow="0 12px 26px rgba(0,0,0,0.35)">
+        <Heading as="h3" size="md" mb={4} color="#f2e07a">Spending Distribution (Doughnut Chart)</Heading>
         <Doughnut data={chartData} options={doughnutOptions} />
       </Box>
     </SimpleGrid>

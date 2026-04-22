@@ -60,11 +60,11 @@ function AddExpenseForm({ onAddExpense, loading }) {
   };
 
   return (
-    <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
-      <Heading as="h2" size="md" mb={4}>Add New Expense</Heading>
+    <Box bg="#07130d" p={6} borderRadius="md" border="1px solid" borderColor="#165d37" boxShadow="0 12px 26px rgba(0,0,0,0.35)">
+      <Heading as="h2" size="md" mb={4} color="#f2e07a">Add New Expense</Heading>
 
       {formError && (
-        <Alert status="error" mb={4} borderRadius="md">
+        <Alert status="error" mb={4} borderRadius="md" bg="#3a0f0f" color="#ffd7d7" border="1px solid" borderColor="#6d1f1f">
           {formError}
         </Alert>
       )}
@@ -73,7 +73,7 @@ function AddExpenseForm({ onAddExpense, loading }) {
         <VStack spacing={4}>
           <SimpleGrid columns={{ base: 1, sm: 2 }} width="100%" spacing={4}>
             <FormControl>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel color="#b9c8bd">Amount</FormLabel>
               <Input
                 type="number"
                 step="0.01"
@@ -82,16 +82,27 @@ function AddExpenseForm({ onAddExpense, loading }) {
                 value={formData.amount}
                 onChange={handleChange}
                 isDisabled={loading}
+                bg="#0d1f15"
+                color="#e4efe7"
+                borderColor="#1b6f42"
+                _placeholder={{ color: '#7d9986' }}
+                _hover={{ borderColor: '#2f9e62' }}
+                _focusVisible={{ borderColor: '#3ebf78', boxShadow: '0 0 0 1px #3ebf78' }}
               />
             </FormControl>
 
             <FormControl>
-              <FormLabel>Category</FormLabel>
+              <FormLabel color="#b9c8bd">Category</FormLabel>
               <Select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
                 isDisabled={loading}
+                bg="#0d1f15"
+                color="#e4efe7"
+                borderColor="#1b6f42"
+                _hover={{ borderColor: '#2f9e62' }}
+                _focusVisible={{ borderColor: '#3ebf78', boxShadow: '0 0 0 1px #3ebf78' }}
               >
                 {CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -102,18 +113,23 @@ function AddExpenseForm({ onAddExpense, loading }) {
 
           <SimpleGrid columns={{ base: 1, sm: 2 }} width="100%" spacing={4}>
             <FormControl>
-              <FormLabel>Date</FormLabel>
+              <FormLabel color="#b9c8bd">Date</FormLabel>
               <Input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 isDisabled={loading}
+                bg="#0d1f15"
+                color="#e4efe7"
+                borderColor="#1b6f42"
+                _hover={{ borderColor: '#2f9e62' }}
+                _focusVisible={{ borderColor: '#3ebf78', boxShadow: '0 0 0 1px #3ebf78' }}
               />
             </FormControl>
 
             <FormControl>
-              <FormLabel>Note (Optional)</FormLabel>
+              <FormLabel color="#b9c8bd">Note (Optional)</FormLabel>
               <Input
                 type="text"
                 placeholder="Add a note..."
@@ -121,13 +137,22 @@ function AddExpenseForm({ onAddExpense, loading }) {
                 value={formData.note}
                 onChange={handleChange}
                 isDisabled={loading}
+                bg="#0d1f15"
+                color="#e4efe7"
+                borderColor="#1b6f42"
+                _placeholder={{ color: '#7d9986' }}
+                _hover={{ borderColor: '#2f9e62' }}
+                _focusVisible={{ borderColor: '#3ebf78', boxShadow: '0 0 0 1px #3ebf78' }}
               />
             </FormControl>
           </SimpleGrid>
 
           <Button
             type="submit"
-            colorScheme="blue"
+            bg="#0a8c42"
+            color="#f4f7f5"
+            _hover={{ bg: '#087639' }}
+            _active={{ bg: '#066430' }}
             width="100%"
             leftIcon={<FiPlus />}
             isLoading={loading}
