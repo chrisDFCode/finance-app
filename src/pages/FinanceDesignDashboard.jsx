@@ -97,6 +97,7 @@ export default function FinanceDesignDashboard() {
         primaryButtonBg: '#A3B18A',
         primaryButtonText: '#1E2520',
         primaryButtonHoverBg: '#8D9D73',
+        success: '#007b34',
       }
     : {
         pageBg: '#EDE7DD',
@@ -115,6 +116,7 @@ export default function FinanceDesignDashboard() {
         primaryButtonBg: '#5E5A4E',
         primaryButtonText: '#FFFDF8',
         primaryButtonHoverBg: '#4C483F',
+        success: '#007b34',
       };
 
   async function handleAddTransaction(e) {
@@ -174,11 +176,11 @@ export default function FinanceDesignDashboard() {
           <img
             src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
             alt="Barya Logo"
-            className="h-[100px] w-[100px] object-contain"
+            className="h-[120px] w-[120px] object-contain"
           />
           <div>
-            <h1 className="text-3xl font-semibold" style={{ color: theme.text }}>Barya</h1>
-            <p className="text-sm" style={{ color: theme.muted }}>Track and manage your expenses</p>
+            <h1 className="text-4xl font-semibold leading-tight" style={{ color: theme.text }}>Barya</h1>
+            <p className="text-base" style={{ color: theme.muted }}>Track and manage your expenses</p>
           </div>
           </div>
           <button
@@ -206,7 +208,7 @@ export default function FinanceDesignDashboard() {
               <span style={{ color: theme.muted }}>Total Balance</span>
               <Wallet className="text-blue-500" size={20} />
             </div>
-            <p className={`text-3xl font-semibold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className="text-3xl font-semibold" style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
               {formatCurrency(balance)}
             </p>
           </div>
@@ -214,9 +216,9 @@ export default function FinanceDesignDashboard() {
           <div className="rounded-lg shadow-soft p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Income</span>
-              <TrendingUp className="text-green-500" size={20} />
+              <TrendingUp style={{ color: theme.success }} size={20} />
             </div>
-            <p className="text-3xl font-semibold text-green-600">{formatCurrency(totalIncome)}</p>
+            <p className="text-3xl font-semibold" style={{ color: theme.success }}>{formatCurrency(totalIncome)}</p>
           </div>
 
           <div className="rounded-lg shadow-soft p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
@@ -262,7 +264,8 @@ export default function FinanceDesignDashboard() {
                       setFormType('income');
                       setCategory('Salary');
                     }}
-                    className={typeButtonClass(formType === 'income', 'bg-green-500')}
+                    className={typeButtonClass(formType === 'income', 'bg-gray-200')}
+                    style={formType === 'income' ? { backgroundColor: theme.success, color: '#fff' } : undefined}
                   >
                     Income
                   </button>
@@ -379,7 +382,6 @@ export default function FinanceDesignDashboard() {
             <div className="space-y-3 max-h-96 overflow-auto">
               {normalized.slice(0, 10).map((transaction) => {
                 const positive = transaction.amount > 0;
-                const amountColor = positive ? 'text-green-600' : 'text-red-600';
                 return (
                   <div key={transaction.id} className="flex items-center justify-between p-3 rounded border" style={{ backgroundColor: theme.panelRowBg, borderColor: theme.cardBorder }}>
                     <div className="flex-1">
@@ -389,7 +391,7 @@ export default function FinanceDesignDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className={`text-lg font-semibold ${amountColor}`}>
+                      <div className="text-lg font-semibold" style={{ color: positive ? theme.success : '#dc2626' }}>
                         {positive ? '+' : '-'}{formatCurrency(Math.abs(transaction.amount))}
                       </div>
                       <button
