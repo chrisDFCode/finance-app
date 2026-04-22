@@ -5,7 +5,7 @@ import { expensesService } from '../services/supabaseClient';
 
 const EXPENSE_CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Debt', 'Other'];
 const INCOME_CATEGORIES = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
-const CATEGORY_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#6b7280'];
+const CATEGORY_COLORS = ['#007b34', '#2f9a58', '#5ab97b', '#7acc93', '#9bd8ac', '#bde5c7', '#d9f1e0', '#e7f7eb', '#f2fbf4'];
 
 function formatCurrency(amount) {
   return new Intl.NumberFormat('en-PH', {
@@ -85,17 +85,17 @@ export default function FinanceDesignDashboard() {
         cardBg: '#242D27',
         cardBgSoft: '#2A332D',
         cardBorder: '#3C4741',
-        text: '#F9FAFB',
+        text: '#EDE7DD',
         muted: '#C7D0CA',
         inputBg: '#2A332D',
         inputBorder: '#516059',
         panelRowBg: '#2B342E',
-        panelTitle: '#F9FAFB',
+        panelTitle: '#EDE7DD',
         controlBg: '#3A463F',
-        controlText: '#F9FAFB',
+        controlText: '#EDE7DD',
         toggleBorder: '#5F6C66',
         primaryButtonBg: '#A3B18A',
-        primaryButtonText: '#1E2520',
+        primaryButtonText: '#EDE7DD',
         primaryButtonHoverBg: '#8D9D73',
         success: '#007b34',
       }
@@ -166,7 +166,8 @@ export default function FinanceDesignDashboard() {
   }
 
   const typeButtonClass = (active, color) =>
-    `px-3 py-2 rounded text-sm ${active ? color + ' text-white' : 'bg-gray-200 text-gray-700'}`;
+    `px-3 py-2 rounded text-sm ${active ? color : 'bg-gray-200 text-gray-700'}`;
+  const activeTypeButtonText = isDarkMode ? '#EDE7DD' : '#FFFFFF';
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: theme.pageBg }}>
@@ -255,6 +256,7 @@ export default function FinanceDesignDashboard() {
                       if (!category || category === 'Salary' || category === 'Debt') setCategory('Food');
                     }}
                     className={typeButtonClass(formType === 'expense', 'bg-red-500')}
+                    style={formType === 'expense' ? { color: activeTypeButtonText } : undefined}
                   >
                     Expense
                   </button>
@@ -265,7 +267,7 @@ export default function FinanceDesignDashboard() {
                       setCategory('Salary');
                     }}
                     className={typeButtonClass(formType === 'income', 'bg-gray-200')}
-                    style={formType === 'income' ? { backgroundColor: theme.success, color: '#fff' } : undefined}
+                    style={formType === 'income' ? { backgroundColor: theme.success, color: activeTypeButtonText } : undefined}
                   >
                     Income
                   </button>
@@ -276,6 +278,7 @@ export default function FinanceDesignDashboard() {
                       setCategory('Debt');
                     }}
                     className={typeButtonClass(formType === 'debt', 'bg-amber-500')}
+                    style={formType === 'debt' ? { color: activeTypeButtonText } : undefined}
                   >
                     Debt
                   </button>
