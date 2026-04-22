@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { PlusCircle, TrendingUp, TrendingDown, Wallet, DollarSign, Trash2 } from 'lucide-react';
+import { PlusCircle, TrendingUp, TrendingDown, Wallet, DollarSign, Trash2, Sun, MoonStar } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { expensesService } from '../services/supabaseClient';
 
@@ -20,6 +20,7 @@ export default function FinanceDesignDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [formType, setFormType] = useState('expense');
   const [amount, setAmount] = useState('');
@@ -78,6 +79,38 @@ export default function FinanceDesignDashboard() {
     return Object.keys(bucket).map((name) => ({ name, value: bucket[name] }));
   }, [normalized]);
 
+  const theme = isDarkMode
+    ? {
+        pageBg: '#1E2520',
+        cardBg: '#242D27',
+        cardBgSoft: '#2A332D',
+        cardBorder: '#3C4741',
+        text: '#F9FAFB',
+        muted: '#C7D0CA',
+        inputBg: '#2A332D',
+        inputBorder: '#516059',
+        panelRowBg: '#2B342E',
+        panelTitle: '#F9FAFB',
+        controlBg: '#3A463F',
+        controlText: '#F9FAFB',
+        toggleBorder: '#5F6C66',
+      }
+    : {
+        pageBg: '#EDE7DD',
+        cardBg: '#F7F1E6',
+        cardBgSoft: '#F3EEDF',
+        cardBorder: '#D9CDBB',
+        text: '#1F2937',
+        muted: '#6B7280',
+        inputBg: '#FFFDF8',
+        inputBorder: '#CFC5B5',
+        panelRowBg: '#FBF8F1',
+        panelTitle: '#111827',
+        controlBg: '#E6DCCB',
+        controlText: '#1F2937',
+        toggleBorder: '#BFAF97',
+      };
+
   async function handleAddTransaction(e) {
     e.preventDefault();
     if (!amount || !category || !description) {
@@ -128,14 +161,29 @@ export default function FinanceDesignDashboard() {
     `px-3 py-2 rounded text-sm ${active ? color + ' text-white' : 'bg-gray-200 text-gray-700'}`;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#1E2520' }}>
+    <div className="min-h-screen" style={{ backgroundColor: theme.pageBg }}>
       <div className="max-w-6xl mx-auto p-6">
-        <div className="flex items-center gap-3 mb-8">
-          <img src="/barya-logo.png" alt="Barya Logo" className="h-[100px] w-[100px] object-contain" />
+        <div className="flex items-center justify-between gap-3 mb-8">
+          <div className="flex items-center gap-3">
+          <img src="/barya-logo.png" alt="Barya Logo" className="h-16 w-16 object-contain" />
           <div>
-            <h1 className="text-3xl font-semibold text-gray-100">Barya</h1>
-            <p className="text-gray-300 text-sm">Track and manage your expenses</p>
+            <h1 className="text-3xl font-semibold" style={{ color: theme.text }}>Barya</h1>
+            <p className="text-sm" style={{ color: theme.muted }}>Track and manage your expenses</p>
           </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsDarkMode((prev) => !prev)}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition"
+            style={{
+              backgroundColor: theme.controlBg,
+              color: theme.controlText,
+              border: `1px solid ${theme.toggleBorder}`,
+            }}
+          >
+            {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
+            {isDarkMode ? 'Light mode' : 'Dark mode'}
+          </button>
         </div>
 
         {error ? (
@@ -143,9 +191,9 @@ export default function FinanceDesignDashboard() {
         ) : null}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-soft p-6 border border-gray-200">
+          <div className="rounded-lg shadow-soft p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600">Total Balance</span>
+              <span style={{ color: theme.muted }}>Total Balance</span>
               <Wallet className="text-blue-500" size={20} />
             </div>
             <p className={`text-3xl font-semibold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -153,20 +201,20 @@ export default function FinanceDesignDashboard() {
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-soft p-6 border border-gray-200">
+          <div className="rounded-lg shadow-soft p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600">Total Income</span>
+              <span style={{ color: theme.muted }}>Total Income</span>
               <TrendingUp className="text-green-500" size={20} />
             </div>
             <p className="text-3xl font-semibold text-green-600">{formatCurrency(totalIncome)}</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-soft p-6 border border-gray-200">
+          <div className="rounded-lg shadow-soft p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600">Total Expenses</span>
-              <TrendingDown className="text-red-500" size={20} />
+              <span style={{ color: theme.muted }}>Total Expenses</span>
+              <TrendingDown className="text-red-400" size={20} />
             </div>
-            <p className="text-3xl font-semibold text-red-600">{formatCurrency(totalExpenses)}</p>
+            <p className="text-3xl font-semibold text-red-400">{formatCurrency(totalExpenses)}</p>
           </div>
         </div>
 
@@ -181,11 +229,11 @@ export default function FinanceDesignDashboard() {
         </div>
 
         {showForm && (
-          <div className="bg-white rounded-lg shadow-soft border border-gray-200 p-6 mb-8">
-            <h2 className="text-xl mb-4">New Transaction</h2>
+          <div className="rounded-lg shadow-soft border p-6 mb-8" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className="text-xl mb-4" style={{ color: theme.panelTitle }}>New Transaction</h2>
             <form onSubmit={handleAddTransaction}>
               <div className="mb-4">
-                <label className="block mb-2 text-gray-700">Type</label>
+                <label className="block mb-2" style={{ color: theme.muted }}>Type</label>
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -221,7 +269,7 @@ export default function FinanceDesignDashboard() {
               </div>
 
               <div className="mb-4">
-                <label className="block mb-2 text-gray-700">Amount</label>
+                <label className="block mb-2" style={{ color: theme.muted }}>Amount</label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-3 text-gray-400" size={20} />
                   <input
@@ -229,7 +277,8 @@ export default function FinanceDesignDashboard() {
                     step="0.01"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ backgroundColor: theme.inputBg, color: theme.text, border: `1px solid ${theme.inputBorder}` }}
                     placeholder="0.00"
                     required
                   />
@@ -237,11 +286,12 @@ export default function FinanceDesignDashboard() {
               </div>
 
               <div className="mb-4">
-                <label className="block mb-2 text-gray-700">Category</label>
+                <label className="block mb-2" style={{ color: theme.muted }}>Category</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{ backgroundColor: theme.inputBg, color: theme.text, border: `1px solid ${theme.inputBorder}` }}
                   required
                 >
                   <option value="">Select category</option>
@@ -252,12 +302,13 @@ export default function FinanceDesignDashboard() {
               </div>
 
               <div className="mb-4">
-                <label className="block mb-2 text-gray-700">Description</label>
+                <label className="block mb-2" style={{ color: theme.muted }}>Description</label>
                 <input
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{ backgroundColor: theme.inputBg, color: theme.text, border: `1px solid ${theme.inputBorder}` }}
                   placeholder="Enter description"
                   required
                 />
@@ -274,7 +325,8 @@ export default function FinanceDesignDashboard() {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400 transition"
+                  className="px-6 py-2 rounded transition"
+                  style={{ backgroundColor: theme.controlBg, color: theme.controlText }}
                 >
                   Cancel
                 </button>
@@ -284,8 +336,8 @@ export default function FinanceDesignDashboard() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-soft border border-gray-200 p-6">
-            <h2 className="text-xl mb-4">Expenses by Category</h2>
+          <div className="rounded-lg shadow-soft border p-6" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className="text-xl mb-4" style={{ color: theme.panelTitle }}>Expenses by Category</h2>
             {expensesByCategory.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -306,21 +358,21 @@ export default function FinanceDesignDashboard() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-gray-500">No expense data yet</div>
+              <div className="h-[300px] flex items-center justify-center" style={{ color: theme.muted }}>No expense data yet</div>
             )}
           </div>
 
-          <div className="bg-white rounded-lg shadow-soft border border-gray-200 p-6">
-            <h2 className="text-xl mb-4">Recent Transactions</h2>
+          <div className="rounded-lg shadow-soft border p-6" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className="text-xl mb-4" style={{ color: theme.panelTitle }}>Recent Transactions</h2>
             <div className="space-y-3 max-h-96 overflow-auto">
               {normalized.slice(0, 10).map((transaction) => {
                 const positive = transaction.amount > 0;
                 const amountColor = positive ? 'text-green-600' : 'text-red-600';
                 return (
-                  <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                  <div key={transaction.id} className="flex items-center justify-between p-3 rounded border" style={{ backgroundColor: theme.panelRowBg, borderColor: theme.cardBorder }}>
                     <div className="flex-1">
-                      <div className="font-medium">{transaction.note || transaction.category}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-medium" style={{ color: theme.text }}>{transaction.note || transaction.category}</div>
+                      <div className="text-sm" style={{ color: theme.muted }}>
                         {transaction.category} • {transaction.date}
                       </div>
                     </div>
@@ -330,7 +382,8 @@ export default function FinanceDesignDashboard() {
                       </div>
                       <button
                         onClick={() => handleDelete(transaction.id)}
-                        className="text-gray-500 hover:text-red-600"
+                        className="hover:text-red-600"
+                        style={{ color: theme.muted }}
                         title="Delete transaction"
                         disabled={loading}
                       >
