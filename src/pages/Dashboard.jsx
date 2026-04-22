@@ -81,7 +81,7 @@ function Dashboard() {
         <Container maxW="1200px">
           <HStack spacing={4} align="center">
             <Image
-              src="/barya-logo.jpg"
+              src="/barya-logo.png"
               alt="Barya logo"
               boxSize={{ base: '52px', md: '64px' }}
               objectFit="contain"
