@@ -1,13 +1,8 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import Dashboard from './pages/Dashboard';
+import FinanceDesignDashboard from './pages/FinanceDesignDashboard';
 
 function App() {
-  return (
-    <ChakraProvider>
-      <Dashboard />
-    </ChakraProvider>
-  );
+  return <FinanceDesignDashboard />;
 }
 
 export default App;
