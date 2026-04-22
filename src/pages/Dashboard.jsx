@@ -72,8 +72,8 @@ function Dashboard() {
       {/* Header */}
       <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" color="white" py={8} mb={8}>
         <Container maxW="1200px">
-          <Heading as="h1" size="2xl">💰 Finance Tracker</Heading>
-          <Text fontSize="lg" mt={2} opacity={0.9}>Manage your expenses and track your spending</Text>
+          <Heading as="h1" size="2xl">Finance Tracker</Heading>
+          <Text fontSize="lg" mt={2} opacity={0.9}>Track and Manage your expenses</Text>
         </Container>
       </Box>
 

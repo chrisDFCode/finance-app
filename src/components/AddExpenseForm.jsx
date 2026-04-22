@@ -73,7 +73,7 @@ function AddExpenseForm({ onAddExpense, loading }) {
         <VStack spacing={4}>
           <SimpleGrid columns={{ base: 1, sm: 2 }} width="100%" spacing={4}>
             <FormControl>
-              <FormLabel>Amount ($)</FormLabel>
+              <FormLabel>Amount</FormLabel>
               <Input
                 type="number"
                 step="0.01"
