@@ -94,6 +94,9 @@ export default function FinanceDesignDashboard() {
         controlBg: '#3A463F',
         controlText: '#F9FAFB',
         toggleBorder: '#5F6C66',
+        primaryButtonBg: '#A3B18A',
+        primaryButtonText: '#1E2520',
+        primaryButtonHoverBg: '#8D9D73',
       }
     : {
         pageBg: '#EDE7DD',
@@ -109,6 +112,9 @@ export default function FinanceDesignDashboard() {
         controlBg: '#E6DCCB',
         controlText: '#1F2937',
         toggleBorder: '#BFAF97',
+        primaryButtonBg: '#5E5A4E',
+        primaryButtonText: '#FFFDF8',
+        primaryButtonHoverBg: '#4C483F',
       };
 
   async function handleAddTransaction(e) {
@@ -225,7 +231,8 @@ export default function FinanceDesignDashboard() {
         <div className="mb-6">
           <button
             onClick={() => setShowForm((prev) => !prev)}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition"
+            className="px-6 py-3 rounded-lg flex items-center gap-2 transition hover:opacity-90"
+            style={{ backgroundColor: theme.primaryButtonBg, color: theme.primaryButtonText }}
           >
             <PlusCircle size={20} />
             Add Transaction
@@ -322,7 +329,8 @@ export default function FinanceDesignDashboard() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition disabled:opacity-60"
+                  className="px-6 py-2 rounded transition disabled:opacity-60 hover:opacity-90"
+                  style={{ backgroundColor: theme.primaryButtonBg, color: theme.primaryButtonText }}
                 >
                   Add Transaction
                 </button>
