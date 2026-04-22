@@ -1,24 +1,27 @@
 import React from 'react';
-import '../styles/components.css';
+import { Box, Button, Heading, Flex, Wrap, WrapItem } from '@chakra-ui/react';
 
 const CATEGORIES = ['All', 'Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Other'];
 
 function CategoryFilter({ selectedCategory, onCategoryChange }) {
   return (
-    <div className="category-filter">
-      <h3>Filter by Category</h3>
-      <div className="filter-buttons">
+    <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
+      <Heading as="h3" size="md" mb={4}>Filter by Category</Heading>
+      <Wrap spacing={2}>
         {CATEGORIES.map(category => (
-          <button
-            key={category}
-            className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => onCategoryChange(category)}
-          >
-            {category}
-          </button>
+          <WrapItem key={category}>
+            <Button
+              onClick={() => onCategoryChange(category)}
+              colorScheme={selectedCategory === category ? 'blue' : 'gray'}
+              variant={selectedCategory === category ? 'solid' : 'outline'}
+              size="sm"
+            >
+              {category}
+            </Button>
+          </WrapItem>
         ))}
-      </div>
-    </div>
+      </Wrap>
+    </Box>
   );
 }
 

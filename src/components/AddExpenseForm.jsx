@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { Box, Button, FormControl, FormLabel, Input, Select, Heading, Alert, AlertIcon, VStack, SimpleGrid } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
-import '../styles/components.css';
 
 const CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Other'];
 
@@ -60,79 +60,85 @@ function AddExpenseForm({ onAddExpense, loading }) {
   };
 
   return (
-    <form className="add-expense-form" onSubmit={handleSubmit}>
-      <h2>Add New Expense</h2>
+    <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
+      <Heading as="h2" size="md" mb={4}>Add New Expense</Heading>
 
-      {formError && <div className="form-error">{formError}</div>}
+      {formError && (
+        <Alert status="error" mb={4} borderRadius="md">
+          <AlertIcon />
+          {formError}
+        </Alert>
+      )}
 
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="amount">Amount ($)</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            step="0.01"
-            placeholder="0.00"
-            value={formData.amount}
-            onChange={handleChange}
-            disabled={loading}
-          />
-        </div>
+      <form onSubmit={handleSubmit}>
+        <VStack spacing={4}>
+          <SimpleGrid columns={{ base: 1, sm: 2 }} width="100%" spacing={4}>
+            <FormControl>
+              <FormLabel>Amount ($)</FormLabel>
+              <Input
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                isDisabled={loading}
+              />
+            </FormControl>
 
-        <div className="form-group">
-          <label htmlFor="category">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            disabled={loading}
+            <FormControl>
+              <FormLabel>Category</FormLabel>
+              <Select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                isDisabled={loading}
+              >
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </Select>
+            </FormControl>
+          </SimpleGrid>
+
+          <SimpleGrid columns={{ base: 1, sm: 2 }} width="100%" spacing={4}>
+            <FormControl>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                isDisabled={loading}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Note (Optional)</FormLabel>
+              <Input
+                type="text"
+                placeholder="Add a note..."
+                name="note"
+                value={formData.note}
+                onChange={handleChange}
+                isDisabled={loading}
+              />
+            </FormControl>
+          </SimpleGrid>
+
+          <Button
+            type="submit"
+            colorScheme="blue"
+            width="100%"
+            leftIcon={<FiPlus />}
+            isLoading={loading}
+            loadingText="Adding..."
           >
-            {CATEGORIES.map(cat => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="date">Date</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            disabled={loading}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="note">Note (Optional)</label>
-          <input
-            type="text"
-            id="note"
-            name="note"
-            placeholder="Add a note..."
-            value={formData.note}
-            onChange={handleChange}
-            disabled={loading}
-          />
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="btn-primary"
-        disabled={loading}
-      >
-        <FiPlus /> {loading ? 'Adding...' : 'Add Expense'}
-      </button>
-    </form>
+            Add Expense
+          </Button>
+        </VStack>
+      </form>
+    </Box>
   );
 }
 

@@ -1,60 +1,55 @@
 import React from 'react';
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Heading, Badge, Button, Center, Text } from '@chakra-ui/react';
 import { FiTrash2 } from 'react-icons/fi';
 import { formatCurrency, formatDate } from '../utils/helpers';
-import '../styles/components.css';
 
 function ExpenseTable({ expenses, onDelete, loading }) {
   if (expenses.length === 0) {
     return (
-      <div className="empty-state">
-        <p>No expenses yet. Add one to get started!</p>
-      </div>
+      <Center py={10}>
+        <Text fontSize="lg" color="gray.500">No expenses yet. Add one to get started!</Text>
+      </Center>
     );
   }
 
   return (
-    <div className="expenses-table-container">
-      <h2>All Expenses</h2>
-      <table className="expenses-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Note</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
+    <Box bg="white" p={6} borderRadius="md" boxShadow="sm" overflowX="auto">
+      <Heading as="h2" size="md" mb={4}>All Expenses</Heading>
+      <Table>
+        <Thead>
+          <Tr bg="gray.100">
+            <Th>Date</Th>
+            <Th>Category</Th>
+            <Th>Amount</Th>
+            <Th>Note</Th>
+            <Th>Action</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {expenses.map(expense => (
-            <tr key={expense.id} className="expense-row">
-              <td>{formatDate(expense.date)}</td>
-              <td>
-                <span className="category-badge">
-                  {expense.category}
-                </span>
-              </td>
-              <td className="amount">
-                {formatCurrency(expense.amount)}
-              </td>
-              <td className="note">
-                {expense.note || '-'}
-              </td>
-              <td>
-                <button
-                  className="btn-delete"
+            <Tr key={expense.id} _hover={{ bg: 'gray.50' }}>
+              <Td>{formatDate(expense.date)}</Td>
+              <Td>
+                <Badge colorScheme="blue">{expense.category}</Badge>
+              </Td>
+              <Td fontWeight="semibold">{formatCurrency(expense.amount)}</Td>
+              <Td color={expense.note ? 'inherit' : 'gray.400'}>{expense.note || '-'}</Td>
+              <Td>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  variant="ghost"
+                  leftIcon={<FiTrash2 />}
                   onClick={() => onDelete(expense.id)}
-                  disabled={loading}
+                  isDisabled={loading}
                   title="Delete expense"
-                >
-                  <FiTrash2 />
-                </button>
-              </td>
-            </tr>
+                />
+              </Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </Tbody>
+      </Table>
+    </Box>
   );
 }
 

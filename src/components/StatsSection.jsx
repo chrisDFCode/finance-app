@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Box, Stat, StatLabel, StatNumber, StatHelpText, SimpleGrid } from '@chakra-ui/react';
 import { formatCurrency, calculateTotal } from '../utils/helpers';
-import '../styles/components.css';
 
 function StatsSection({ expenses, loading }) {
   const [total, setTotal] = useState(0);
@@ -10,27 +10,33 @@ function StatsSection({ expenses, loading }) {
   }, [expenses]);
 
   return (
-    <div className="stats-section">
-      <div className="stat-card-large">
-        <h3>Total Spending</h3>
-        <p className="total-amount">{formatCurrency(total)}</p>
-        <small>{expenses.length} transactions</small>
-      </div>
+    <SimpleGrid columns={{ base: 1 }} spacing={4}>
+      <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" p={6} borderRadius="md" color="white">
+        <Stat>
+          <StatLabel fontSize="md" opacity={0.9}>Total Spending</StatLabel>
+          <StatNumber fontSize="3xl" fontWeight="bold">{formatCurrency(total)}</StatNumber>
+          <StatHelpText color="whiteAlpha.800">{expenses.length} transactions</StatHelpText>
+        </Stat>
+      </Box>
 
-      <div className="stat-card-large">
-        <h3>Average Per Transaction</h3>
-        <p className="total-amount">
-          {expenses.length > 0
-            ? formatCurrency(total / expenses.length)
-            : formatCurrency(0)}
-        </p>
-      </div>
+      <Box bg="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" p={6} borderRadius="md" color="white">
+        <Stat>
+          <StatLabel fontSize="md" opacity={0.9}>Average Per Transaction</StatLabel>
+          <StatNumber fontSize="3xl" fontWeight="bold">
+            {expenses.length > 0
+              ? formatCurrency(total / expenses.length)
+              : formatCurrency(0)}
+          </StatNumber>
+        </Stat>
+      </Box>
 
-      <div className="stat-card-large">
-        <h3>Total Transactions</h3>
-        <p className="total-amount">{expenses.length}</p>
-      </div>
-    </div>
+      <Box bg="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" p={6} borderRadius="md" color="white">
+        <Stat>
+          <StatLabel fontSize="md" opacity={0.9}>Total Transactions</StatLabel>
+          <StatNumber fontSize="3xl" fontWeight="bold">{expenses.length}</StatNumber>
+        </Stat>
+      </Box>
+    </SimpleGrid>
   );
 }
 

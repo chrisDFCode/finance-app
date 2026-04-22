@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
+import { Box, Heading, Stat, StatLabel, StatNumber, StatHelpText, VStack, HStack, Divider, Text, Badge } from '@chakra-ui/react';
 import { formatCurrency, calculateCategoryTotal } from '../utils/helpers';
-import '../styles/components.css';
 
 function MonthlySummary({ expenses, month = null, year = null }) {
   const now = new Date();
@@ -31,33 +31,32 @@ function MonthlySummary({ expenses, month = null, year = null }) {
   });
 
   return (
-    <div className="monthly-summary">
-      <h2>Monthly Summary - {monthName}</h2>
+    <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
+      <Heading as="h2" size="md" mb={6}>Monthly Summary - {monthName}</Heading>
 
-      <div className="summary-stats">
-        <div className="stat-card">
-          <h4>Total Spending</h4>
-          <p className="stat-value">{formatCurrency(total)}</p>
-          <small>{monthlyExpenses.length} transactions</small>
-        </div>
-      </div>
+      <Box bg="gray.50" p={4} borderRadius="md" mb={6}>
+        <Stat>
+          <StatLabel>Total Spending</StatLabel>
+          <StatNumber fontSize="2xl">{formatCurrency(total)}</StatNumber>
+          <StatHelpText>{monthlyExpenses.length} transactions</StatHelpText>
+        </Stat>
+      </Box>
 
       {Object.keys(categoryTotals).length > 0 ? (
-        <div className="category-breakdown">
-          <h4>By Category</h4>
-          <div className="breakdown-list">
-            {Object.entries(categoryTotals).map(([category, amount]) => (
-              <div key={category} className="breakdown-item">
-                <span className="category-name">{category}</span>
-                <span className="category-amount">{formatCurrency(amount)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <VStack align="stretch" spacing={3}>
+          <Heading as="h4" size="sm">By Category</Heading>
+          <Divider />
+          {Object.entries(categoryTotals).map(([category, amount]) => (
+            <HStack key={category} justify="space-between" px={2}>
+              <Badge colorScheme="blue">{category}</Badge>
+              <Text fontWeight="semibold">{formatCurrency(amount)}</Text>
+            </HStack>
+          ))}
+        </VStack>
       ) : (
-        <p className="no-data">No expenses this month</p>
+        <Text color="gray.500" textAlign="center" py={4}>No expenses this month</Text>
       )}
-    </div>
+    </Box>
   );
 }
 

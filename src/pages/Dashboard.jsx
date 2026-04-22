@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FiAlertCircle } from 'react-icons/fi';
+import { Box, Container, Heading, Text, Alert, AlertIcon, CloseButton, SimpleGrid, Spinner, Center } from '@chakra-ui/react';
 import AddExpenseForm from '../components/AddExpenseForm';
 import ExpenseTable from '../components/ExpenseTable';
 import CategoryFilter from '../components/CategoryFilter';
@@ -8,7 +8,6 @@ import ChartComponent from '../components/ChartComponent';
 import StatsSection from '../components/StatsSection';
 import { useExpenses, useFilter } from '../hooks/useExpenses';
 import { expensesService } from '../services/supabaseClient';
-import '../styles/dashboard.css';
 
 function Dashboard() {
   const { expenses, setExpensesData, addExpense, removeExpense, setLoading, loading, error, setError } = useExpenses();
@@ -69,57 +68,78 @@ function Dashboard() {
     : expenses.filter(exp => exp.category === selectedCategory);
 
   return (
-    <div className="dashboard">
-      <header className="dashboard-header">
-        <div className="header-content">
-          <h1>💰 Finance Tracker</h1>
-          <p>Manage your expenses and track your spending</p>
-        </div>
-      </header>
+    <Box minH="100vh" bg="gray.50">
+      {/* Header */}
+      <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" color="white" py={8} mb={8}>
+        <Container maxW="1200px">
+          <Heading as="h1" size="2xl">💰 Finance Tracker</Heading>
+          <Text fontSize="lg" mt={2} opacity={0.9}>Manage your expenses and track your spending</Text>
+        </Container>
+      </Box>
 
-      <main className="dashboard-main">
+      {/* Main Content */}
+      <Container maxW="1200px" pb={10}>
+        {/* Error Alert */}
         {error && (
-          <div className="error-banner">
-            <FiAlertCircle /> {error}
-            <button onClick={() => setError(null)} className="close-btn">×</button>
-          </div>
+          <Alert status="error" mb={6} borderRadius="md">
+            <AlertIcon />
+            {error}
+            <CloseButton ml="auto" onClick={() => setError(null)} />
+          </Alert>
         )}
 
-        <div className="dashboard-container">
-          {/* Left Column */}
-          <div className="left-column">
-            <AddExpenseForm onAddExpense={handleAddExpense} loading={loading} />
-            <CategoryFilter
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-            />
-          </div>
+        {/* Loading State */}
+        {loading && (
+          <Center py={10}>
+            <Spinner size="lg" color="blue.500" />
+          </Center>
+        )}
 
-          {/* Right Column */}
-          <div className="right-column">
-            <StatsSection expenses={filteredExpenses} loading={loading} />
-            <MonthlySummary expenses={filteredExpenses} />
-          </div>
-        </div>
+        {!loading && (
+          <>
+            {/* Left and Right Columns */}
+            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} mb={8}>
+              {/* Left Column */}
+              <Box>
+                <AddExpenseForm onAddExpense={handleAddExpense} loading={loading} />
+                <Box mt={6}>
+                  <CategoryFilter
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                  />
+                </Box>
+              </Box>
 
-        {/* Full Width Sections */}
-        <div className="full-width">
-          <ChartComponent expenses={filteredExpenses} />
-        </div>
+              {/* Right Column */}
+              <Box>
+                <StatsSection expenses={filteredExpenses} loading={loading} />
+                <Box mt={6}>
+                  <MonthlySummary expenses={filteredExpenses} />
+                </Box>
+              </Box>
+            </SimpleGrid>
 
-        <div className="full-width">
-          <ExpenseTable
-            expenses={filteredExpenses}
-            onDelete={handleDeleteExpense}
-            loading={loading}
-          />
-        </div>
-      </main>
+            {/* Full Width Sections */}
+            <Box mb={8}>
+              <ChartComponent expenses={filteredExpenses} />
+            </Box>
 
-      <footer className="dashboard-footer">
-        <p>&copy; 2024 Finance Tracker. Built with React & Supabase.</p>
-      </footer>
-    </div>
+            <Box>
+              <ExpenseTable
+                expenses={filteredExpenses}
+                onDelete={handleDeleteExpense}
+                loading={loading}
+              />
+            </Box>
+          </>
+        )}
+      </Container>
+
+      {/* Footer */}
+      <Box bg="gray.200" py={4} mt={10} textAlign="center">
+        <Text>&copy; 2024 Finance Tracker. Built with React & Supabase.</Text>
+      </Box>
+    </Box>
   );
 }
 

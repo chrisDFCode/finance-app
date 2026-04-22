@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
+import { Box, Heading, SimpleGrid, Center, Text } from '@chakra-ui/react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { getCategoryColor, calculateCategoryTotal } from '../utils/helpers';
-import '../styles/components.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -74,24 +74,24 @@ function ChartComponent({ expenses }) {
 
   if (categories.length === 0) {
     return (
-      <div className="charts-container">
-        <p className="no-data">No data to display. Add expenses to see charts.</p>
-      </div>
+      <Center py={10}>
+        <Text color="gray.500" fontSize="lg">No data to display. Add expenses to see charts.</Text>
+      </Center>
     );
   }
 
   return (
-    <div className="charts-container">
-      <div className="chart-wrapper">
-        <h3>Spending by Category (Bar Chart)</h3>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+      <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
+        <Heading as="h3" size="md" mb={4}>Spending by Category (Bar Chart)</Heading>
         <Bar data={chartData} options={chartOptions} />
-      </div>
+      </Box>
 
-      <div className="chart-wrapper">
-        <h3>Spending Distribution (Doughnut Chart)</h3>
+      <Box bg="white" p={6} borderRadius="md" boxShadow="sm">
+        <Heading as="h3" size="md" mb={4}>Spending Distribution (Doughnut Chart)</Heading>
         <Doughnut data={chartData} options={doughnutOptions} />
-      </div>
-    </div>
+      </Box>
+    </SimpleGrid>
   );
 }
 
