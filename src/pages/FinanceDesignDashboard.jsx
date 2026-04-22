@@ -128,13 +128,13 @@ export default function FinanceDesignDashboard() {
     `px-3 py-2 rounded text-sm ${active ? color + ' text-white' : 'bg-gray-200 text-gray-700'}`;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#1E2520' }}>
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex items-center gap-3 mb-8">
           <img src="/barya-logo.png" alt="Barya Logo" className="h-[100px] w-[100px] object-contain" />
           <div>
-            <h1 className="text-3xl font-semibold">Barya</h1>
-            <p className="text-gray-600 text-sm">Track and manage your expenses</p>
+            <h1 className="text-3xl font-semibold text-gray-100">Barya</h1>
+            <p className="text-gray-300 text-sm">Track and manage your expenses</p>
           </div>
         </div>
 
