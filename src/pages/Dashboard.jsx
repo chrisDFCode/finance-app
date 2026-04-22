@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Container, Heading, Text, Alert, AlertIcon, CloseButton, SimpleGrid, Spinner, Center } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, Alert, CloseButton, SimpleGrid, Spinner, Center } from '@chakra-ui/react';
 import AddExpenseForm from '../components/AddExpenseForm';
 import ExpenseTable from '../components/ExpenseTable';
 import CategoryFilter from '../components/CategoryFilter';
@@ -25,7 +25,7 @@ function Dashboard() {
       setExpensesData(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load expenses. Please try again.');
+      setError(err?.message || 'Failed to load expenses. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -39,7 +39,7 @@ function Dashboard() {
       addExpense(newExpense);
       setError(null);
     } catch (err) {
-      setError('Failed to add expense. Please try again.');
+      setError(err?.message || 'Failed to add expense. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ function Dashboard() {
       removeExpense(id);
       setError(null);
     } catch (err) {
-      setError('Failed to delete expense. Please try again.');
+      setError(err?.message || 'Failed to delete expense. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -82,7 +82,6 @@ function Dashboard() {
         {/* Error Alert */}
         {error && (
           <Alert status="error" mb={6} borderRadius="md">
-            <AlertIcon />
             {error}
             <CloseButton ml="auto" onClick={() => setError(null)} />
           </Alert>

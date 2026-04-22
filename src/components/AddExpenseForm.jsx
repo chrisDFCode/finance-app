@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Select, Heading, Alert, AlertIcon, VStack, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Select, Heading, Alert, VStack, SimpleGrid } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
 
 const CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Other'];
@@ -65,7 +65,6 @@ function AddExpenseForm({ onAddExpense, loading }) {
 
       {formError && (
         <Alert status="error" mb={4} borderRadius="md">
-          <AlertIcon />
           {formError}
         </Alert>
       )}

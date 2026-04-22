@@ -36,27 +36,33 @@ CREATE TRIGGER update_expenses_updated_at
 -- Enable Row Level Security (optional but recommended)
 ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 
--- Create a policy to allow authenticated users to see their own expenses
--- (This assumes you have user_id column - commented out for this simple version)
--- CREATE POLICY "Users can see their own expenses"
---   ON expenses FOR SELECT
---   USING (auth.uid() = user_id);
+-- Demo policies for client-side app using anon key.
+-- In production with auth, replace these with user-scoped policies.
+DROP POLICY IF EXISTS "Allow read expenses" ON expenses;
+DROP POLICY IF EXISTS "Allow insert expenses" ON expenses;
+DROP POLICY IF EXISTS "Allow update expenses" ON expenses;
+DROP POLICY IF EXISTS "Allow delete expenses" ON expenses;
 
--- Create a policy to allow authenticated users to insert expenses
--- CREATE POLICY "Users can insert their own expenses"
---   ON expenses FOR INSERT
---   WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Allow read expenses"
+  ON expenses FOR SELECT
+  TO anon, authenticated
+  USING (true);
 
--- Create a policy to allow authenticated users to update their own expenses
--- CREATE POLICY "Users can update their own expenses"
---   ON expenses FOR UPDATE
---   USING (auth.uid() = user_id)
---   WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Allow insert expenses"
+  ON expenses FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
 
--- Create a policy to allow authenticated users to delete their own expenses
--- CREATE POLICY "Users can delete their own expenses"
---   ON expenses FOR DELETE
---   USING (auth.uid() = user_id);
+CREATE POLICY "Allow update expenses"
+  ON expenses FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
+
+CREATE POLICY "Allow delete expenses"
+  ON expenses FOR DELETE
+  TO anon, authenticated
+  USING (true);
 
 -- Insert sample data (optional - for testing)
 -- INSERT INTO expenses (amount, category, date, note) VALUES
