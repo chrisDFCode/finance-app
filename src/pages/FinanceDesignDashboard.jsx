@@ -15,7 +15,7 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-export default function FinanceDesignDashboard() {
+export default function FinanceDesignDashboard({ user, onSignOut }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,8 +28,10 @@ export default function FinanceDesignDashboard() {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    loadTransactions();
-  }, []);
+    if (user?.id) {
+      loadTransactions();
+    }
+  }, [user?.id]);
 
   async function loadTransactions() {
     setLoading(true);
@@ -165,6 +167,14 @@ export default function FinanceDesignDashboard() {
     }
   }
 
+  async function handleSignOut() {
+    try {
+      await onSignOut();
+    } catch (err) {
+      setError(err?.message || 'Failed to sign out.');
+    }
+  }
+
   const typeButtonClass = (active, color) =>
     `px-3 py-2 rounded text-sm ${active ? color : 'bg-gray-200 text-gray-700'}`;
   const activeTypeButtonText = isDarkMode ? '#EDE7DD' : '#FFFFFF';
@@ -185,19 +195,36 @@ export default function FinanceDesignDashboard() {
             </h1>
           </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsDarkMode((prev) => !prev)}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition"
-            style={{
-              backgroundColor: theme.controlBg,
-              color: theme.controlText,
-              border: `1px solid ${theme.toggleBorder}`,
-            }}
-          >
-            {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
-            {isDarkMode ? 'Light mode' : 'Dark mode'}
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="hidden md:block text-sm" style={{ color: theme.muted }}>
+              {user?.email}
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsDarkMode((prev) => !prev)}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition"
+              style={{
+                backgroundColor: theme.controlBg,
+                color: theme.controlText,
+                border: `1px solid ${theme.toggleBorder}`,
+              }}
+            >
+              {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
+              {isDarkMode ? 'Light mode' : 'Dark mode'}
+            </button>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition"
+              style={{
+                backgroundColor: theme.controlBg,
+                color: theme.controlText,
+                border: `1px solid ${theme.toggleBorder}`,
+              }}
+            >
+              Sign out
+            </button>
+          </div>
         </div>
 
         {error ? (

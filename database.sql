@@ -17,6 +17,12 @@ CREATE INDEX IF NOT EXISTS idx_expenses_date ON expenses(date);
 CREATE INDEX IF NOT EXISTS idx_expenses_category ON expenses(category);
 CREATE INDEX IF NOT EXISTS idx_expenses_created_at ON expenses(created_at);
 
+-- Link each expense row to an authenticated user
+ALTER TABLE expenses
+  ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS idx_expenses_user_id ON expenses(user_id);
+
 -- Create a function to update the updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -36,8 +42,7 @@ CREATE TRIGGER update_expenses_updated_at
 -- Enable Row Level Security (optional but recommended)
 ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 
--- Demo policies for client-side app using anon key.
--- In production with auth, replace these with user-scoped policies.
+-- User-scoped policies for authenticated access.
 DROP POLICY IF EXISTS "Allow read expenses" ON expenses;
 DROP POLICY IF EXISTS "Allow insert expenses" ON expenses;
 DROP POLICY IF EXISTS "Allow update expenses" ON expenses;
@@ -45,24 +50,24 @@ DROP POLICY IF EXISTS "Allow delete expenses" ON expenses;
 
 CREATE POLICY "Allow read expenses"
   ON expenses FOR SELECT
-  TO anon, authenticated
-  USING (true);
+  TO authenticated
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Allow insert expenses"
   ON expenses FOR INSERT
-  TO anon, authenticated
-  WITH CHECK (true);
+  TO authenticated
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Allow update expenses"
   ON expenses FOR UPDATE
-  TO anon, authenticated
-  USING (true)
-  WITH CHECK (true);
+  TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Allow delete expenses"
   ON expenses FOR DELETE
-  TO anon, authenticated
-  USING (true);
+  TO authenticated
+  USING (auth.uid() = user_id);
 
 -- Insert sample data (optional - for testing)
 -- INSERT INTO expenses (amount, category, date, note) VALUES
