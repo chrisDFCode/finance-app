@@ -1,55 +1,68 @@
 import React from 'react';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Heading, Badge, Button, Center, Text } from '@chakra-ui/react';
-import { FiTrash2 } from 'react-icons/fi';
+import { Box, Heading, Center, Text, VStack, HStack, Badge, IconButton } from '@chakra-ui/react';
+import { FiArrowUpRight, FiArrowDownRight, FiTrash2 } from 'react-icons/fi';
 import { formatCurrency, formatDate } from '../utils/helpers';
 
 function ExpenseTable({ expenses, onDelete, loading }) {
+  const recentTransactions = expenses.slice(0, 6);
+
   if (expenses.length === 0) {
     return (
-      <Center py={10}>
-        <Text fontSize="lg" color="#8fa395">No expenses yet. Add one to get started!</Text>
-      </Center>
+      <Box bg="#f1f2f4" p={6} borderRadius="md" border="1px solid" borderColor="#d7d9de">
+        <Heading as="h3" size="md" mb={4} color="#111827">Recent Transactions</Heading>
+        <Center py={10}>
+          <Text fontSize="lg" color="#6b7280">No transactions yet.</Text>
+        </Center>
+      </Box>
     );
   }
 
   return (
-    <Box bg="#07130d" p={6} borderRadius="md" border="1px solid" borderColor="#165d37" boxShadow="0 12px 26px rgba(0,0,0,0.35)" overflowX="auto">
-      <Heading as="h2" size="md" mb={4} color="#f2e07a">All Expenses</Heading>
-      <Table>
-        <Thead>
-          <Tr bg="#0d1f15">
-            <Th color="#b9c8bd">Date</Th>
-            <Th color="#b9c8bd">Category</Th>
-            <Th color="#b9c8bd">Amount</Th>
-            <Th color="#b9c8bd">Note</Th>
-            <Th color="#b9c8bd">Action</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {expenses.map((expense, index) => (
-            <Tr key={expense.id} bg={index % 2 === 0 ? '#08170f' : '#0a1b12'} _hover={{ bg: '#12301f' }}>
-              <Td color="#e4efe7">{formatDate(expense.date)}</Td>
-              <Td>
-                <Badge bg="#0a8c42" color="#f6fbf8">{expense.category}</Badge>
-              </Td>
-              <Td fontWeight="semibold" color="#f2e07a">{formatCurrency(expense.amount)}</Td>
-              <Td color={expense.note ? '#d7e5dc' : '#6f8678'}>{expense.note || '-'}</Td>
-              <Td>
-                <Button
+    <Box bg="#f1f2f4" p={6} borderRadius="md" border="1px solid" borderColor="#d7d9de">
+      <Heading as="h3" size="md" mb={4} color="#111827">Recent Transactions</Heading>
+      <VStack spacing={3} align="stretch">
+        {recentTransactions.map(transaction => {
+          const amount = Number(transaction.amount);
+          const isIncome = amount > 0;
+          const color = isIncome ? '#16a34a' : '#ef4444';
+          return (
+            <HStack
+              key={transaction.id}
+              justify="space-between"
+              bg="#e9eaed"
+              px={3}
+              py={2}
+              borderRadius="md"
+            >
+              <Box>
+                <HStack spacing={2}>
+                  <Box color={color}>{isIncome ? <FiArrowUpRight /> : <FiArrowDownRight />}</Box>
+                  <Text fontWeight="600" color="#111827">{transaction.note || transaction.category}</Text>
+                </HStack>
+                <HStack spacing={2} mt={1}>
+                  <Badge bg="#d1d5db" color="#374151">{transaction.category}</Badge>
+                  <Text fontSize="xs" color="#6b7280">{formatDate(transaction.date)}</Text>
+                </HStack>
+              </Box>
+              <HStack spacing={2}>
+                <Text fontWeight="700" color={color}>
+                  {isIncome ? '+' : '-'}{formatCurrency(Math.abs(amount))}
+                </Text>
+                <IconButton
+                  aria-label="Delete transaction"
+                  icon={<FiTrash2 />}
                   size="sm"
-                  bg="#3a0f0f"
-                  color="#ffd7d7"
-                  _hover={{ bg: '#4d1616' }}
-                  leftIcon={<FiTrash2 />}
-                  onClick={() => onDelete(expense.id)}
+                  variant="ghost"
+                  color="#6b7280"
+                  _hover={{ bg: '#d4d7dc', color: '#111827' }}
+                  onClick={() => onDelete(transaction.id)}
                   isDisabled={loading}
-                  title="Delete expense"
                 />
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+              </HStack>
+            </HStack>
+          );
+        })}
+      </VStack>
     </Box>
   );
 }

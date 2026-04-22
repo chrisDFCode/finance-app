@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react';
-import { Box, Container, Heading, Text, Alert, CloseButton, SimpleGrid, Spinner, Center, HStack, Image } from '@chakra-ui/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box, Container, Heading, Text, Alert, CloseButton, SimpleGrid, Spinner, Center, HStack, Image, Button, VStack, Icon } from '@chakra-ui/react';
+import { FiPlusCircle, FiCreditCard, FiTrendingUp, FiTrendingDown } from 'react-icons/fi';
 import AddExpenseForm from '../components/AddExpenseForm';
 import ExpenseTable from '../components/ExpenseTable';
-import CategoryFilter from '../components/CategoryFilter';
-import MonthlySummary from '../components/MonthlySummary';
 import ChartComponent from '../components/ChartComponent';
-import StatsSection from '../components/StatsSection';
-import { useExpenses, useFilter } from '../hooks/useExpenses';
+import { useExpenses } from '../hooks/useExpenses';
+import { formatCurrency } from '../utils/helpers';
 import { expensesService } from '../services/supabaseClient';
 
 function Dashboard() {
   const { expenses, setExpensesData, addExpense, removeExpense, setLoading, loading, error, setError } = useExpenses();
-  const { selectedCategory, setSelectedCategory } = useFilter();
+  const [showForm, setShowForm] = useState(false);
 
   // Fetch expenses on mount
   useEffect(() => {
@@ -62,44 +61,48 @@ function Dashboard() {
     }
   };
 
-  // Filter expenses based on selected category
-  const filteredExpenses = selectedCategory === 'All'
-    ? expenses
-    : expenses.filter(exp => exp.category === selectedCategory);
+  const totalIncome = useMemo(
+    () => expenses.filter(exp => Number(exp.amount) > 0).reduce((sum, exp) => sum + Number(exp.amount), 0),
+    [expenses]
+  );
+
+  const totalExpenses = useMemo(
+    () => expenses.filter(exp => Number(exp.amount) < 0).reduce((sum, exp) => sum + Math.abs(Number(exp.amount)), 0),
+    [expenses]
+  );
+
+  const totalBalance = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses]);
 
   return (
-    <Box minH="100vh" bg="#040806">
+    <Box minH="100vh" bg="#e8e8ea">
       {/* Header */}
       <Box
-        bg="linear-gradient(130deg, #03140b 0%, #0b2f1b 50%, #06110b 100%)"
-        borderBottom="1px solid"
-        borderColor="#196a3d"
-        color="#f2e07a"
-        py={8}
-        mb={8}
+        bg="#e8e8ea"
+        color="#0f172a"
+        py={6}
       >
-        <Container maxW="1200px">
+        <Container maxW="1200px" px={{ base: 4, md: 6 }}>
           <HStack spacing={4} align="center">
             <Image
               src="/barya-logo.png"
               alt="Barya logo"
-              boxSize={{ base: '52px', md: '64px' }}
+              boxSize={{ base: '32px', md: '40px' }}
               objectFit="contain"
               fallbackSrc=""
             />
             <Box>
-              <Heading as="h1" size="2xl" letterSpacing="wider">BARYA Finance</Heading>
-              <Text fontSize="lg" mt={2} color="#b9c8bd">Track and manage your expenses</Text>
+              <Heading as="h1" size="lg" letterSpacing="tight">Barya</Heading>
+              <Text fontSize="sm" color="#4b5563">Track and manage your expenses</Text>
             </Box>
           </HStack>
         </Container>
       </Box>
 
       {/* Main Content */}
-      <Container maxW="1200px" pb={10}>
+      <Container maxW="1200px" pb={10} px={{ base: 4, md: 6 }}>
         {/* Error Alert */}
         {error && (
-          <Alert status="error" mb={6} borderRadius="md" bg="#3a0f0f" color="#ffd7d7" border="1px solid" borderColor="#6d1f1f">
+          <Alert status="error" mb={6} borderRadius="md">
             {error}
             <CloseButton ml="auto" onClick={() => setError(null)} />
           </Alert>
@@ -114,47 +117,71 @@ function Dashboard() {
 
         {!loading && (
           <>
-            {/* Left and Right Columns */}
-            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} mb={8}>
-              {/* Left Column */}
-              <Box>
-                <AddExpenseForm onAddExpense={handleAddExpense} loading={loading} />
-                <Box mt={6}>
-                  <CategoryFilter
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={setSelectedCategory}
-                  />
-                </Box>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} mb={6}>
+              <Box bg="#f1f2f4" border="1px solid" borderColor="#d7d9de" borderRadius="md" p={5}>
+                <HStack justify="space-between" mb={2}>
+                  <Text fontSize="md" color="#1f2937">Total Balance</Text>
+                  <Icon as={FiCreditCard} color="#2563eb" />
+                </HStack>
+                <Text fontSize="3xl" fontWeight="bold" color={totalBalance >= 0 ? '#059669' : '#dc2626'}>{formatCurrency(totalBalance)}</Text>
               </Box>
 
-              {/* Right Column */}
-              <Box>
-                <StatsSection expenses={filteredExpenses} loading={loading} />
-                <Box mt={6}>
-                  <MonthlySummary expenses={filteredExpenses} />
-                </Box>
+              <Box bg="#f1f2f4" border="1px solid" borderColor="#d7d9de" borderRadius="md" p={5}>
+                <HStack justify="space-between" mb={2}>
+                  <Text fontSize="md" color="#1f2937">Total Income</Text>
+                  <Icon as={FiTrendingUp} color="#16a34a" />
+                </HStack>
+                <Text fontSize="3xl" fontWeight="bold" color="#16a34a">{formatCurrency(totalIncome)}</Text>
+              </Box>
+
+              <Box bg="#f1f2f4" border="1px solid" borderColor="#d7d9de" borderRadius="md" p={5}>
+                <HStack justify="space-between" mb={2}>
+                  <Text fontSize="md" color="#1f2937">Total Expenses</Text>
+                  <Icon as={FiTrendingDown} color="#ef4444" />
+                </HStack>
+                <Text fontSize="3xl" fontWeight="bold" color="#ef4444">{formatCurrency(totalExpenses)}</Text>
               </Box>
             </SimpleGrid>
 
-            {/* Full Width Sections */}
-            <Box mb={8}>
-              <ChartComponent expenses={filteredExpenses} />
-            </Box>
+            <VStack align="stretch" spacing={4} mb={6}>
+              <Box>
+                <Button
+                  leftIcon={<FiPlusCircle />}
+                  colorScheme="blue"
+                  borderRadius="md"
+                  onClick={() => setShowForm(prev => !prev)}
+                >
+                  {showForm ? 'Hide Transaction Form' : 'Add Transaction'}
+                </Button>
+              </Box>
 
-            <Box>
+              {showForm && (
+                <Box bg="#f1f2f4" border="1px solid" borderColor="#d7d9de" borderRadius="md" p={4}>
+                  <AddExpenseForm onAddExpense={handleAddExpense} loading={loading} onCancel={() => setShowForm(false)} />
+                </Box>
+              )}
+            </VStack>
+
+            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+              <Box>
+                <ChartComponent expenses={expenses} />
+              </Box>
+
+              <Box>
               <ExpenseTable
-                expenses={filteredExpenses}
+                expenses={expenses}
                 onDelete={handleDeleteExpense}
                 loading={loading}
               />
-            </Box>
+              </Box>
+            </SimpleGrid>
           </>
         )}
       </Container>
 
       {/* Footer */}
-      <Box bg="#07130d" borderTop="1px solid" borderColor="#165d37" py={4} mt={10} textAlign="center">
-        <Text color="#8fa395">&copy; 2026 Barya Finance. Built with React & Supabase.</Text>
+      <Box py={4} mt={10} textAlign="center">
+        <Text color="#6b7280">&copy; 2026 Barya Finance. Built with React & Supabase.</Text>
       </Box>
     </Box>
   );
