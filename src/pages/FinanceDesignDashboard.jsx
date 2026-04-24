@@ -184,8 +184,8 @@ export default function FinanceDesignDashboard({
     `px-3 py-2 rounded text-sm ${active ? color : 'bg-gray-200 text-gray-700'}`;
   const activeTypeButtonText = isDarkMode ? '#EDE7DD' : '#FFFFFF';
   const compact = forceMobileView;
-  const chartHeight = compact ? 220 : 260;
-  const pieOuterRadius = compact ? 72 : 85;
+  const chartHeight = compact ? 200 : 260;
+  const pieOuterRadius = compact ? 60 : 85;
 
   return (
     <div className="min-h-[100dvh] overflow-x-clip" style={{ backgroundColor: theme.pageBg }}>
@@ -260,7 +260,7 @@ export default function FinanceDesignDashboard({
         {/* Large Balance Card */}
         <div className="rounded-xl shadow-lg px-6 py-8 mb-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
           <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
-          <div className="text-5xl font-bold" style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
+          <div className={compact ? 'text-xl font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
             {formatCurrency(balance)}
           </div>
         </div>
@@ -269,11 +269,11 @@ export default function FinanceDesignDashboard({
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="rounded-lg shadow px-4 py-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div style={{ color: theme.muted }} className="text-xs mb-2 uppercase">Total Income</div>
-            <div className="text-2xl font-bold" style={{ color: theme.success }}>{formatCurrency(totalIncome)}</div>
+            <div className={compact ? 'text-sm font-bold break-words' : 'text-base sm:text-lg lg:text-xl font-bold'} style={{ color: theme.success }}>{formatCurrency(totalIncome)}</div>
           </div>
           <div className="rounded-lg shadow px-4 py-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div style={{ color: theme.muted }} className="text-xs mb-2 uppercase">Total Expenses</div>
-            <div className="text-2xl font-bold text-red-400">{formatCurrency(totalExpenses)}</div>
+            <div className={compact ? 'text-sm font-bold break-words text-red-400' : 'text-base sm:text-lg lg:text-xl font-bold text-red-400'}>{formatCurrency(totalExpenses)}</div>
           </div>
         </div>
 
@@ -410,7 +410,7 @@ export default function FinanceDesignDashboard({
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={compact ? false : ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={pieOuterRadius}
                     dataKey="value"
                   >
@@ -440,7 +440,7 @@ export default function FinanceDesignDashboard({
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className={compact ? 'text-base font-semibold' : 'text-base sm:text-lg font-semibold'} style={{ color: positive ? theme.success : '#dc2626' }}>
+                      <div className={compact ? 'text-sm font-semibold' : 'text-base sm:text-lg font-semibold'} style={{ color: positive ? theme.success : '#dc2626' }}>
                         {positive ? '+' : '-'}{formatCurrency(Math.abs(transaction.amount))}
                       </div>
                       <button
