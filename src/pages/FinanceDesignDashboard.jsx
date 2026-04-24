@@ -195,10 +195,10 @@ export default function FinanceDesignDashboard({
             <img
               src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
               alt="Barya Logo"
-              className="h-12 w-12 object-contain"
+              className={compact ? 'h-16 w-16 object-contain' : 'h-20 w-20 object-contain'}
             />
             <div>
-              <h1 className="text-sm font-medium leading-tight" style={{ color: theme.text }}>
+              <h1 className={compact ? 'text-xl font-semibold leading-tight' : 'text-2xl font-semibold leading-tight'} style={{ color: theme.text }}>
                 Barya
               </h1>
             </div>
