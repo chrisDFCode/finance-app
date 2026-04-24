@@ -188,59 +188,9 @@ export default function FinanceDesignDashboard({
   const pieOuterRadius = compact ? 72 : 85;
 
   return (
-    <div className="relative min-h-[100dvh] overflow-x-clip" style={{ backgroundColor: theme.pageBg }}>
-      <div className="absolute right-0 top-20 z-40">
-        <button
-          type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="rounded-l-xl border border-r-0 px-2 py-3 text-[11px] font-semibold tracking-[0.16em] uppercase select-none"
-          style={{
-            backgroundColor: theme.controlBg,
-            color: theme.controlText,
-            borderColor: theme.toggleBorder,
-            writingMode: 'vertical-rl',
-            textOrientation: 'mixed',
-          }}
-        >
-          Menu
-        </button>
-
-        <div
-          className={`absolute right-0 top-0 w-64 rounded-l-xl border p-3 transition-all duration-150 ${menuOpen ? 'translate-x-0 opacity-100 visible' : 'translate-x-3 opacity-0 invisible'}`}
-          style={{
-            backgroundColor: theme.cardBg,
-            borderColor: theme.cardBorder,
-            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.18)',
-          }}
-        >
-          <div className="mb-3 rounded-lg border px-3 py-2" style={{ borderColor: theme.cardBorder }}>
-            <div className="text-[11px] uppercase tracking-[0.14em]" style={{ color: theme.muted }}>Account</div>
-            <div className="mt-1 break-words text-sm font-medium" style={{ color: theme.text }}>
-              {user?.email}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsDarkMode((prev) => !prev)}
-            className="mb-2 w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
-            style={{ backgroundColor: theme.controlBg, color: theme.controlText }}
-          >
-            {isDarkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
-            style={{ backgroundColor: '#b91c1c', color: '#FEE2E2' }}
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
+    <div className="min-h-[100dvh] overflow-x-clip" style={{ backgroundColor: theme.pageBg }}>
       <div className={compact ? 'max-w-6xl mx-auto p-3' : 'max-w-6xl mx-auto p-4 sm:p-6'}>
-        <div className={compact ? 'flex flex-col gap-4 mb-6' : 'flex flex-col gap-4 mb-6 sm:mb-8 md:flex-row md:items-center md:justify-between'}>
+        <div className="relative flex items-start justify-between gap-4 mb-6 sm:mb-8">
           <div className="flex items-center gap-3">
           <img
             src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
@@ -253,9 +203,52 @@ export default function FinanceDesignDashboard({
             </h1>
           </div>
           </div>
-          <div className={compact ? 'flex flex-wrap items-center gap-2' : 'flex flex-wrap items-center gap-2'}>
-            <div className={compact ? 'w-full text-xs' : 'w-full text-xs sm:text-sm md:w-auto'} style={{ color: theme.muted }}>
-              {user?.email}
+          <div className="relative z-40 shrink-0">
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+              style={{
+                backgroundColor: theme.controlBg,
+                color: theme.controlText,
+                borderColor: theme.toggleBorder,
+              }}
+            >
+              Menu
+            </button>
+
+            <div
+              className={`absolute right-0 top-full mt-2 w-64 rounded-xl border p-3 transition-all duration-150 ${menuOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-1 opacity-0 invisible'}`}
+              style={{
+                backgroundColor: theme.cardBg,
+                borderColor: theme.cardBorder,
+                boxShadow: '0 12px 24px rgba(0, 0, 0, 0.18)',
+              }}
+            >
+              <div className="mb-3 rounded-lg border px-3 py-2" style={{ borderColor: theme.cardBorder }}>
+                <div className="text-[11px] uppercase tracking-[0.14em]" style={{ color: theme.muted }}>Account</div>
+                <div className="mt-1 break-words text-sm font-medium" style={{ color: theme.text }}>
+                  {user?.email}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsDarkMode((prev) => !prev)}
+                className="mb-2 w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
+                style={{ backgroundColor: theme.controlBg, color: theme.controlText }}
+              >
+                {isDarkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
+                style={{ backgroundColor: '#b91c1c', color: '#FEE2E2' }}
+              >
+                Sign out
+              </button>
             </div>
           </div>
         </div>
