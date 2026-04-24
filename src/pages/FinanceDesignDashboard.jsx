@@ -19,8 +19,6 @@ export default function FinanceDesignDashboard({
   user,
   onSignOut,
   forceMobileView = false,
-  viewMode = 'desktop',
-  onViewModeChange = () => {},
 }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -230,34 +228,6 @@ export default function FinanceDesignDashboard({
           >
             {isDarkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}
           </button>
-
-          <div className="mb-2 rounded-lg border p-2" style={{ borderColor: theme.cardBorder }}>
-            <div className="mb-1 text-xs" style={{ color: theme.muted }}>View mode</div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => onViewModeChange('mobile')}
-                className="rounded px-2 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: viewMode === 'mobile' ? theme.success : theme.controlBg,
-                  color: viewMode === 'mobile' ? '#EDE7DD' : theme.controlText,
-                }}
-              >
-                Mobile
-              </button>
-              <button
-                type="button"
-                onClick={() => onViewModeChange('desktop')}
-                className="rounded px-2 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: viewMode === 'desktop' ? theme.success : theme.controlBg,
-                  color: viewMode === 'desktop' ? '#EDE7DD' : theme.controlText,
-                }}
-              >
-                Desktop
-              </button>
-            </div>
-          </div>
 
           <button
             type="button"
