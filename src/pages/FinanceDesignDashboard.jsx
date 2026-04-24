@@ -190,18 +190,18 @@ export default function FinanceDesignDashboard({
   return (
     <div className="min-h-[100dvh] overflow-x-clip" style={{ backgroundColor: theme.pageBg }}>
       <div className={compact ? 'max-w-6xl mx-auto px-6 py-8' : 'max-w-6xl mx-auto p-4 sm:p-6'}>
-        <div className="relative flex items-center justify-between gap-4 mb-6 sm:mb-8">
-          <div className="flex items-center gap-3">
-          <img
-            src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
-            alt="Barya Logo"
-            className={compact ? 'h-[181px] w-[181px] object-contain' : 'h-[189px] w-[189px] object-contain sm:h-[205px] sm:w-[205px] md:h-[245px] md:w-[245px]'}
-          />
-          <div>
-            <h1 className={compact ? 'text-sm leading-tight' : 'text-base sm:text-lg leading-tight'} style={{ color: theme.text }}>
-              Barya - Track and manage your expenses
-            </h1>
-          </div>
+        <div className="relative flex items-center justify-between gap-2 mb-8">
+          <div className="flex items-center gap-2">
+            <img
+              src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
+              alt="Barya Logo"
+              className="h-12 w-12 object-contain"
+            />
+            <div>
+              <h1 className="text-sm font-medium leading-tight" style={{ color: theme.text }}>
+                Barya
+              </h1>
+            </div>
           </div>
           <div className="relative z-40 shrink-0 self-center">
             <button
@@ -257,31 +257,23 @@ export default function FinanceDesignDashboard({
           <div className="mb-4 rounded-lg border border-red-300 bg-red-100 px-4 py-3 text-red-800">{error}</div>
         ) : null}
 
-        <div className={compact ? 'grid grid-cols-1 gap-5 mb-6 sm:mb-8' : 'grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8'}>
-          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
-            <div className="flex items-center justify-between mb-2">
-              <span style={{ color: theme.muted }}>Total Balance</span>
-              <Wallet className="text-blue-500" size={20} />
-            </div>
-            <p className={compact ? 'text-2xl font-semibold' : 'text-2xl sm:text-3xl font-semibold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
-              {formatCurrency(balance)}
-            </p>
+        {/* Large Balance Card */}
+        <div className="rounded-xl shadow-lg px-6 py-8 mb-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
+          <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
+          <div className="text-5xl font-bold" style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
+            {formatCurrency(balance)}
           </div>
+        </div>
 
-          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
-            <div className="flex items-center justify-between mb-2">
-              <span style={{ color: theme.muted }}>Total Income</span>
-              <TrendingUp style={{ color: theme.success }} size={20} />
-            </div>
-            <p className={compact ? 'text-2xl font-semibold' : 'text-2xl sm:text-3xl font-semibold'} style={{ color: theme.success }}>{formatCurrency(totalIncome)}</p>
+        {/* Income & Expenses Side by Side */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="rounded-lg shadow px-4 py-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-xs mb-2 uppercase">Total Income</div>
+            <div className="text-2xl font-bold" style={{ color: theme.success }}>{formatCurrency(totalIncome)}</div>
           </div>
-
-          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
-            <div className="flex items-center justify-between mb-2">
-              <span style={{ color: theme.muted }}>Total Expenses</span>
-              <TrendingDown className="text-red-400" size={20} />
-            </div>
-            <p className={compact ? 'text-2xl font-semibold text-red-400' : 'text-2xl sm:text-3xl font-semibold text-red-400'}>{formatCurrency(totalExpenses)}</p>
+          <div className="rounded-lg shadow px-4 py-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-xs mb-2 uppercase">Total Expenses</div>
+            <div className="text-2xl font-bold text-red-400">{formatCurrency(totalExpenses)}</div>
           </div>
         </div>
 
