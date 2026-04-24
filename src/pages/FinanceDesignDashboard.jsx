@@ -94,6 +94,13 @@ export default function FinanceDesignDashboard({
     [normalized]
   );
 
+  const debtTransactions = useMemo(
+    () => normalized
+      .filter((t) => t.amount < 0 && t.category === 'Debt')
+      .sort((a, b) => a.date.localeCompare(b.date)),
+    [normalized]
+  );
+
   const nextDebtDueDate = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
     const debtDates = normalized
@@ -323,6 +330,38 @@ export default function FinanceDesignDashboard({
             <div style={{ color: theme.muted }} className="text-xs mb-2 uppercase">Total Expenses</div>
             <div className={compact ? 'text-sm font-bold break-words text-red-400' : 'text-base sm:text-lg lg:text-xl font-bold text-red-400'}>{formatCurrency(totalExpenses)}</div>
           </div>
+        </div>
+
+        <div className={compact ? 'rounded-lg shadow-soft border px-5 py-4 mb-6' : 'rounded-lg shadow-soft border p-4 sm:p-6 mb-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+          <h2 className={compact ? 'text-lg mb-3' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>Debt Records</h2>
+          {debtTransactions.length > 0 ? (
+            <div className="space-y-2 max-h-56 overflow-auto">
+              {debtTransactions.map((debt) => (
+                <div key={debt.id} className="flex items-center justify-between rounded border px-3 py-2 gap-3" style={{ backgroundColor: theme.panelRowBg, borderColor: theme.cardBorder }}>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate font-medium" style={{ color: theme.text }}>{debt.note || 'Debt item'}</div>
+                    <div className="text-xs" style={{ color: theme.muted }}>Due: {formatDate(debt.date)}</div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div className={compact ? 'text-sm font-semibold text-red-400' : 'text-base font-semibold text-red-400'}>
+                      {formatCurrency(Math.abs(debt.amount))}
+                    </div>
+                    <button
+                      onClick={() => handleDelete(debt.id)}
+                      className="hover:text-red-600"
+                      style={{ color: theme.muted }}
+                      title="Delete debt"
+                      disabled={loading}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm" style={{ color: theme.muted }}>No debt records yet.</div>
+          )}
         </div>
 
         <div className={compact ? 'mb-5' : 'mb-5 sm:mb-6'}>
