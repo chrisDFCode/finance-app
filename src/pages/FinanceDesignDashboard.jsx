@@ -3,8 +3,8 @@ import { PlusCircle, TrendingUp, TrendingDown, Wallet, DollarSign, Trash2 } from
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { expensesService } from '../services/supabaseClient';
 
-const EXPENSE_CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Debt', 'Other'];
-const INCOME_CATEGORIES = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
+const EXPENSE_CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Shopping', 'Education', 'Business', 'Debt', 'Other'];
+const INCOME_CATEGORIES = ['Salary', 'Freelance', 'Investment', 'Gift', 'Business', 'Other'];
 const CATEGORY_COLORS = ['#007b34', '#2f9a58', '#5ab97b', '#7acc93', '#9bd8ac', '#bde5c7', '#d9f1e0', '#e7f7eb', '#f2fbf4'];
 
 function formatCurrency(amount) {
@@ -74,6 +74,13 @@ export default function FinanceDesignDashboard({
   );
 
   const balance = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses]);
+
+  const runningDebt = useMemo(
+    () => normalized
+      .filter((t) => t.amount < 0 && t.category === 'Debt')
+      .reduce((sum, t) => sum + Math.abs(t.amount), 0),
+    [normalized]
+  );
 
   const expensesByCategory = useMemo(() => {
     const bucket = {};
@@ -259,7 +266,12 @@ export default function FinanceDesignDashboard({
 
         {/* Large Balance Card */}
         <div className="rounded-xl shadow-lg px-6 py-8 mb-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
-          <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <div style={{ color: theme.muted }} className="text-sm">Total Balance</div>
+            <div className={compact ? 'text-xs font-semibold' : 'text-sm font-semibold'} style={{ color: '#dc2626' }}>
+              Running Debt: {formatCurrency(runningDebt)}
+            </div>
+          </div>
           <div className={compact ? 'text-xl font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
             {formatCurrency(balance)}
           </div>
