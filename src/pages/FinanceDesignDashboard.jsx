@@ -195,7 +195,7 @@ export default function FinanceDesignDashboard({
           <img
             src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
             alt="Barya Logo"
-            className={compact ? 'h-14 w-14 object-contain' : 'h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-[120px] md:w-[120px]'}
+            className={compact ? 'h-[181px] w-[181px] object-contain' : 'h-[189px] w-[189px] object-contain sm:h-[205px] sm:w-[205px] md:h-[245px] md:w-[245px]'}
           />
           <div>
             <h1 className={compact ? 'text-sm leading-tight' : 'text-base sm:text-lg leading-tight'} style={{ color: theme.text }}>
