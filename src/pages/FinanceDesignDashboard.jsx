@@ -15,6 +15,17 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
+function formatDate(isoDate) {
+  if (!isoDate) return 'No due date';
+  const date = new Date(`${isoDate}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return isoDate;
+  return new Intl.DateTimeFormat('en-PH', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
+}
+
 export default function FinanceDesignDashboard({
   user,
   onSignOut,
@@ -31,6 +42,7 @@ export default function FinanceDesignDashboard({
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
+  const [debtDueDate, setDebtDueDate] = useState('');
 
   useEffect(() => {
     if (user?.id) {
@@ -81,6 +93,16 @@ export default function FinanceDesignDashboard({
       .reduce((sum, t) => sum + Math.abs(t.amount), 0),
     [normalized]
   );
+
+  const nextDebtDueDate = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const debtDates = normalized
+      .filter((t) => t.amount < 0 && t.category === 'Debt' && t.date)
+      .map((t) => t.date)
+      .filter((date) => date >= today)
+      .sort((a, b) => a.localeCompare(b));
+    return debtDates[0] || null;
+  }, [normalized]);
 
   const expensesByCategory = useMemo(() => {
     const bucket = {};
@@ -139,22 +161,28 @@ export default function FinanceDesignDashboard({
       setError('Please fill out all transaction fields.');
       return;
     }
+    if (formType === 'debt' && !debtDueDate) {
+      setError('Please select a due date for debt.');
+      return;
+    }
 
     const value = Math.abs(parseFloat(amount));
     const signedAmount = formType === 'income' ? value : -value;
+    const transactionDate = formType === 'debt' ? debtDueDate : new Date().toISOString().split('T')[0];
 
     setLoading(true);
     try {
       const created = await expensesService.add({
         amount: signedAmount,
         category,
-        date: new Date().toISOString().split('T')[0],
+        date: transactionDate,
         note: description,
       });
       setTransactions((prev) => [created, ...prev]);
       setAmount('');
       setCategory('');
       setDescription('');
+      setDebtDueDate('');
       setFormType('expense');
       setShowForm(false);
       setError('');
@@ -264,16 +292,24 @@ export default function FinanceDesignDashboard({
           <div className="mb-4 rounded-lg border border-red-300 bg-red-100 px-4 py-3 text-red-800">{error}</div>
         ) : null}
 
-        {/* Large Balance Card */}
-        <div className="rounded-xl shadow-lg px-6 py-8 mb-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <div style={{ color: theme.muted }} className="text-sm">Total Balance</div>
-            <div className={compact ? 'text-xs font-semibold' : 'text-sm font-semibold'} style={{ color: '#dc2626' }}>
-              Running Debt: {formatCurrency(runningDebt)}
+        <div className={compact ? 'grid grid-cols-1 gap-4 mb-5' : 'grid grid-cols-2 gap-4 mb-5'}>
+          {/* Large Balance Card */}
+          <div className="rounded-xl shadow-lg px-6 py-8" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
+            <div className={compact ? 'text-xl font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
+              {formatCurrency(balance)}
             </div>
           </div>
-          <div className={compact ? 'text-xl font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
-            {formatCurrency(balance)}
+
+          {/* Running Debt Card */}
+          <div className="rounded-xl shadow-lg px-6 py-8" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-sm mb-2">Running Debt</div>
+            <div className={compact ? 'text-xl font-bold break-words text-red-400' : 'text-2xl sm:text-3xl lg:text-4xl font-bold text-red-400'}>
+              {formatCurrency(runningDebt)}
+            </div>
+            <div className="mt-2 text-sm" style={{ color: theme.muted }}>
+              Due Date: {formatDate(nextDebtDueDate)}
+            </div>
           </div>
         </div>
 
@@ -311,6 +347,7 @@ export default function FinanceDesignDashboard({
                     type="button"
                     onClick={() => {
                       setFormType('expense');
+                      setDebtDueDate('');
                       if (!category || category === 'Salary' || category === 'Debt') setCategory('Food');
                     }}
                     className={typeButtonClass(formType === 'expense', 'bg-red-500')}
@@ -322,6 +359,7 @@ export default function FinanceDesignDashboard({
                     type="button"
                     onClick={() => {
                       setFormType('income');
+                      setDebtDueDate('');
                       setCategory('Salary');
                     }}
                     className={typeButtonClass(formType === 'income', 'bg-gray-200')}
@@ -375,6 +413,20 @@ export default function FinanceDesignDashboard({
                   ))}
                 </select>
               </div>
+
+              {formType === 'debt' ? (
+                <div className="mb-4">
+                  <label className="block mb-2" style={{ color: theme.muted }}>Due Date</label>
+                  <input
+                    type="date"
+                    value={debtDueDate}
+                    onChange={(e) => setDebtDueDate(e.target.value)}
+                    className="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ backgroundColor: theme.inputBg, color: theme.text, border: `1px solid ${theme.inputBorder}` }}
+                    required
+                  />
+                </div>
+              ) : null}
 
               <div className="mb-4">
                 <label className="block mb-2" style={{ color: theme.muted }}>Description</label>
