@@ -190,7 +190,7 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
             className="h-[120px] w-[120px] object-contain"
           />
           <div>
-            <h1 className="text-4xl font-semibold leading-tight" style={{ color: theme.text }}>
+            <h1 className="text-xl md:text-2xl font-semibold leading-tight" style={{ color: theme.text }}>
               Barya - Track and manage your expenses
             </h1>
           </div>

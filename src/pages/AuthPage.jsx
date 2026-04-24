@@ -35,6 +35,8 @@ export default function AuthPage() {
         secondaryButtonBorder: '#BFAF97',
       };
 
+  const logoSrc = isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png';
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -101,15 +103,15 @@ export default function AuthPage() {
         </div>
 
         <div className="mb-4 flex justify-center">
-          <img src="/barya-logo-dark.png" alt="Barya Logo" className="h-20 w-20 object-contain" />
+          <img src={logoSrc} alt="Barya Logo" className="h-20 w-20 object-contain" />
         </div>
 
         <div className="mb-5 text-center">
           <h1 className="text-2xl font-semibold" style={{ color: theme.text }}>
             {mode === 'signup' ? 'Create your Barya account' : 'Sign in to Barya'}
           </h1>
-          <p className="mt-1 text-sm" style={{ color: theme.muted }}>
-            Track and manage your expenses securely.
+          <p className="mt-1 text-xs" style={{ color: theme.muted }}>
+            Barya - Track and manage your expenses
           </p>
         </div>
 
@@ -161,10 +163,16 @@ export default function AuthPage() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="mt-3 w-full rounded border px-4 py-2 text-sm font-medium transition disabled:opacity-60"
+          className="mt-3 w-full rounded border px-4 py-2 text-sm font-medium transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
           style={{ backgroundColor: theme.secondaryButtonBg, color: theme.text, borderColor: theme.secondaryButtonBorder }}
         >
-          Continue with Google
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.2-.9 2.3-1.9 3l3.1 2.4c1.8-1.6 2.8-4 2.8-6.8 0-.7-.1-1.3-.2-2H12z" />
+            <path fill="#34A853" d="M6.5 14.3l-.7.6-2.4 1.9C5 20 8.2 22 12 22c2.7 0 5- .9 6.6-2.5l-3.1-2.4c-.9.6-2 .9-3.5.9-2.7 0-5-1.8-5.8-4.2z" />
+            <path fill="#FBBC05" d="M3.4 7.1C2.5 8.8 2 10.3 2 12s.5 3.2 1.4 4.9c0 0 3.1-2.4 3.1-2.5-.2-.6-.4-1.3-.4-2s.1-1.4.4-2z" />
+            <path fill="#4285F4" d="M12 4.8c1.9 0 3.6.7 4.9 1.9l2.7-2.7C17.9 2.4 15.2 1.3 12 1.3 8.2 1.3 5 3.3 3.4 7.1l3.1 2.4C7.3 6.6 9.3 4.8 12 4.8z" />
+          </svg>
+          {mode === 'signup' ? 'Sign up with Google' : 'Sign in with Google'}
         </button>
 
         <div className="mt-5 text-center text-sm" style={{ color: theme.muted }}>
