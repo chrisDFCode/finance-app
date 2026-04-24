@@ -198,7 +198,7 @@ export default function FinanceDesignDashboard({
             className={compact ? 'h-14 w-14 object-contain' : 'h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-[120px] md:w-[120px]'}
           />
           <div>
-            <h1 className={compact ? 'text-base font-semibold leading-tight' : 'text-base sm:text-xl md:text-2xl font-semibold leading-tight'} style={{ color: theme.text }}>
+            <h1 className={compact ? 'text-sm leading-tight' : 'text-base sm:text-lg leading-tight'} style={{ color: theme.text }}>
               Barya - Track and manage your expenses
             </h1>
           </div>
