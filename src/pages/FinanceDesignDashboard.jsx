@@ -15,7 +15,13 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-export default function FinanceDesignDashboard({ user, onSignOut }) {
+export default function FinanceDesignDashboard({
+  user,
+  onSignOut,
+  forceMobileView = false,
+  viewMode = 'desktop',
+  onViewModeChange = () => {},
+}) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -178,52 +184,98 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
   const typeButtonClass = (active, color) =>
     `px-3 py-2 rounded text-sm ${active ? color : 'bg-gray-200 text-gray-700'}`;
   const activeTypeButtonText = isDarkMode ? '#EDE7DD' : '#FFFFFF';
+  const compact = forceMobileView;
+  const chartHeight = compact ? 220 : 260;
+  const pieOuterRadius = compact ? 72 : 85;
 
   return (
     <div className="min-h-[100dvh]" style={{ backgroundColor: theme.pageBg }}>
-      <div className="max-w-6xl mx-auto p-4 sm:p-6">
-        <div className="flex flex-col gap-4 mb-6 sm:mb-8 md:flex-row md:items-center md:justify-between">
+      <div className={compact ? 'max-w-6xl mx-auto p-3' : 'max-w-6xl mx-auto p-4 sm:p-6'}>
+        <div className={compact ? 'flex flex-col gap-4 mb-6' : 'flex flex-col gap-4 mb-6 sm:mb-8 md:flex-row md:items-center md:justify-between'}>
           <div className="flex items-center gap-3">
           <img
             src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
             alt="Barya Logo"
-            className="h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-[120px] md:w-[120px]"
+            className={compact ? 'h-14 w-14 object-contain' : 'h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-[120px] md:w-[120px]'}
           />
           <div>
-            <h1 className="text-base sm:text-xl md:text-2xl font-semibold leading-tight" style={{ color: theme.text }}>
+            <h1 className={compact ? 'text-base font-semibold leading-tight' : 'text-base sm:text-xl md:text-2xl font-semibold leading-tight'} style={{ color: theme.text }}>
               Barya - Track and manage your expenses
             </h1>
           </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="w-full text-xs sm:text-sm md:w-auto" style={{ color: theme.muted }}>
+          <div className={compact ? 'flex flex-wrap items-center gap-2' : 'flex flex-wrap items-center gap-2'}>
+            <div className={compact ? 'w-full text-xs' : 'w-full text-xs sm:text-sm md:w-auto'} style={{ color: theme.muted }}>
               {user?.email}
             </div>
-            <button
-              type="button"
-              onClick={() => setIsDarkMode((prev) => !prev)}
-              className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm"
-              style={{
-                backgroundColor: theme.controlBg,
-                color: theme.controlText,
-                border: `1px solid ${theme.toggleBorder}`,
-              }}
-            >
-              {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
-              {isDarkMode ? 'Light mode' : 'Dark mode'}
-            </button>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="inline-flex items-center rounded-full px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm"
-              style={{
-                backgroundColor: theme.controlBg,
-                color: theme.controlText,
-                border: `1px solid ${theme.toggleBorder}`,
-              }}
-            >
-              Sign out
-            </button>
+            <div className="relative group">
+              <button
+                type="button"
+                className={compact ? 'inline-flex items-center rounded-full px-3 py-2 text-xs font-medium transition' : 'inline-flex items-center rounded-full px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm'}
+                style={{
+                  backgroundColor: theme.controlBg,
+                  color: theme.controlText,
+                  border: `1px solid ${theme.toggleBorder}`,
+                }}
+              >
+                Menu
+              </button>
+
+              <div
+                className="absolute right-0 z-40 mt-2 w-56 rounded-xl border p-2 opacity-0 invisible translate-y-1 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0"
+                style={{
+                  backgroundColor: theme.cardBg,
+                  borderColor: theme.cardBorder,
+                  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.18)',
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsDarkMode((prev) => !prev)}
+                  className="mb-2 w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
+                  style={{ backgroundColor: theme.controlBg, color: theme.controlText }}
+                >
+                  {isDarkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}
+                </button>
+
+                <div className="mb-2 rounded-lg border p-2" style={{ borderColor: theme.cardBorder }}>
+                  <div className="mb-1 text-xs" style={{ color: theme.muted }}>View mode</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onViewModeChange('mobile')}
+                      className="rounded px-2 py-1.5 text-xs font-medium"
+                      style={{
+                        backgroundColor: viewMode === 'mobile' ? theme.success : theme.controlBg,
+                        color: viewMode === 'mobile' ? '#EDE7DD' : theme.controlText,
+                      }}
+                    >
+                      Mobile
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onViewModeChange('desktop')}
+                      className="rounded px-2 py-1.5 text-xs font-medium"
+                      style={{
+                        backgroundColor: viewMode === 'desktop' ? theme.success : theme.controlBg,
+                        color: viewMode === 'desktop' ? '#EDE7DD' : theme.controlText,
+                      }}
+                    >
+                      Desktop
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium"
+                  style={{ backgroundColor: '#b91c1c', color: '#FEE2E2' }}
+                >
+                  Sign out
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -231,38 +283,38 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
           <div className="mb-4 rounded-lg border border-red-300 bg-red-100 px-4 py-3 text-red-800">{error}</div>
         ) : null}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div className="rounded-lg shadow-soft p-4 sm:p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+        <div className={compact ? 'grid grid-cols-1 gap-3 mb-6' : 'grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8'}>
+          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Balance</span>
               <Wallet className="text-blue-500" size={20} />
             </div>
-            <p className="text-2xl sm:text-3xl font-semibold" style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
+            <p className={compact ? 'text-2xl font-semibold' : 'text-2xl sm:text-3xl font-semibold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
               {formatCurrency(balance)}
             </p>
           </div>
 
-          <div className="rounded-lg shadow-soft p-4 sm:p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Income</span>
               <TrendingUp style={{ color: theme.success }} size={20} />
             </div>
-            <p className="text-2xl sm:text-3xl font-semibold" style={{ color: theme.success }}>{formatCurrency(totalIncome)}</p>
+            <p className={compact ? 'text-2xl font-semibold' : 'text-2xl sm:text-3xl font-semibold'} style={{ color: theme.success }}>{formatCurrency(totalIncome)}</p>
           </div>
 
-          <div className="rounded-lg shadow-soft p-4 sm:p-6" style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Expenses</span>
               <TrendingDown className="text-red-400" size={20} />
             </div>
-            <p className="text-2xl sm:text-3xl font-semibold text-red-400">{formatCurrency(totalExpenses)}</p>
+            <p className={compact ? 'text-2xl font-semibold text-red-400' : 'text-2xl sm:text-3xl font-semibold text-red-400'}>{formatCurrency(totalExpenses)}</p>
           </div>
         </div>
 
-        <div className="mb-5 sm:mb-6">
+        <div className={compact ? 'mb-5' : 'mb-5 sm:mb-6'}>
           <button
             onClick={() => setShowForm((prev) => !prev)}
-            className="w-full sm:w-auto px-5 py-3 rounded-lg flex items-center justify-center gap-2 transition hover:opacity-90"
+            className={compact ? 'w-full px-5 py-3 rounded-lg flex items-center justify-center gap-2 transition hover:opacity-90' : 'w-full sm:w-auto px-5 py-3 rounded-lg flex items-center justify-center gap-2 transition hover:opacity-90'}
             style={{ backgroundColor: theme.primaryButtonBg, color: theme.primaryButtonText }}
           >
             <PlusCircle size={20} />
@@ -271,12 +323,12 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
         </div>
 
         {showForm && (
-          <div className="rounded-lg shadow-soft border p-4 sm:p-6 mb-6 sm:mb-8" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
-            <h2 className="text-lg sm:text-xl mb-4" style={{ color: theme.panelTitle }}>New Transaction</h2>
+          <div className={compact ? 'rounded-lg shadow-soft border p-4 mb-6' : 'rounded-lg shadow-soft border p-4 sm:p-6 mb-6 sm:mb-8'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>New Transaction</h2>
             <form onSubmit={handleAddTransaction}>
               <div className="mb-4">
                 <label className="block mb-2" style={{ color: theme.muted }}>Type</label>
-                <div className="grid grid-cols-1 gap-2 sm:flex sm:gap-3">
+                <div className={compact ? 'grid grid-cols-1 gap-2' : 'grid grid-cols-1 gap-2 sm:flex sm:gap-3'}>
                   <button
                     type="button"
                     onClick={() => {
@@ -359,7 +411,7 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-2 sm:flex sm:gap-3">
+              <div className={compact ? 'grid grid-cols-1 gap-2' : 'grid grid-cols-1 gap-2 sm:flex sm:gap-3'}>
                 <button
                   type="submit"
                   disabled={loading}
@@ -381,11 +433,11 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-          <div className="rounded-lg shadow-soft border p-4 sm:p-6" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
-            <h2 className="text-lg sm:text-xl mb-4" style={{ color: theme.panelTitle }}>Expenses by Category</h2>
+        <div className={compact ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8'}>
+          <div className={compact ? 'rounded-lg shadow-soft border p-4' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>Expenses by Category</h2>
             {expensesByCategory.length > 0 ? (
-              <ResponsiveContainer width="100%" height={260}>
+              <ResponsiveContainer width="100%" height={chartHeight}>
                 <PieChart>
                   <Pie
                     data={expensesByCategory}
@@ -393,7 +445,7 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
                     cy="50%"
                     labelLine={false}
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={85}
+                    outerRadius={pieOuterRadius}
                     dataKey="value"
                   >
                     {expensesByCategory.map((entry, index) => (
@@ -404,12 +456,12 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[260px] flex items-center justify-center" style={{ color: theme.muted }}>No expense data yet</div>
+              <div className="flex items-center justify-center" style={{ color: theme.muted, height: `${chartHeight}px` }}>No expense data yet</div>
             )}
           </div>
 
-          <div className="rounded-lg shadow-soft border p-4 sm:p-6" style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
-            <h2 className="text-lg sm:text-xl mb-4" style={{ color: theme.panelTitle }}>Recent Transactions</h2>
+          <div className={compact ? 'rounded-lg shadow-soft border p-4' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+            <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>Recent Transactions</h2>
             <div className="space-y-3 max-h-96 overflow-auto">
               {normalized.slice(0, 10).map((transaction) => {
                 const positive = transaction.amount > 0;
@@ -422,7 +474,7 @@ export default function FinanceDesignDashboard({ user, onSignOut }) {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="text-base sm:text-lg font-semibold" style={{ color: positive ? theme.success : '#dc2626' }}>
+                      <div className={compact ? 'text-base font-semibold' : 'text-base sm:text-lg font-semibold'} style={{ color: positive ? theme.success : '#dc2626' }}>
                         {positive ? '+' : '-'}{formatCurrency(Math.abs(transaction.amount))}
                       </div>
                       <button
