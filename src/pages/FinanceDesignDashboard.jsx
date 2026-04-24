@@ -294,21 +294,21 @@ export default function FinanceDesignDashboard({
 
         <div className="grid grid-cols-2 gap-4 mb-5">
           {/* Large Balance Card */}
-          <div className="rounded-xl shadow-lg px-6 py-8" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
-            <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
-            <div className={compact ? 'text-xl font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
+          <div className="rounded-xl shadow-lg px-5 py-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-xs mb-1.5">Total Balance</div>
+            <div className={compact ? 'text-lg font-bold break-words' : 'text-2xl sm:text-3xl lg:text-4xl font-bold'} style={{ color: balance >= 0 ? theme.success : '#dc2626' }}>
               {formatCurrency(balance)}
             </div>
           </div>
 
           {/* Running Debt Card */}
-          <div className="rounded-xl shadow-lg px-6 py-8" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
-            <div style={{ color: theme.muted }} className="text-sm mb-2">Running Debt</div>
-            <div className={compact ? 'text-xl font-bold break-words text-red-400' : 'text-2xl sm:text-3xl lg:text-4xl font-bold text-red-400'}>
+          <div className="rounded-xl shadow-lg px-5 py-5" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
+            <div style={{ color: theme.muted }} className="text-xs mb-1.5">Running Debt</div>
+            <div className={compact ? 'text-lg font-bold break-words text-red-400' : 'text-2xl sm:text-3xl lg:text-4xl font-bold text-red-400'}>
               {formatCurrency(runningDebt)}
             </div>
-            <div className="mt-2 text-sm" style={{ color: theme.muted }}>
-              Due Date: {formatDate(nextDebtDueDate)}
+            <div className="mt-1 text-xs" style={{ color: theme.muted }}>
+              Due: {formatDate(nextDebtDueDate)}
             </div>
           </div>
         </div>
