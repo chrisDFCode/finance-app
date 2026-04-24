@@ -292,7 +292,7 @@ export default function FinanceDesignDashboard({
           <div className="mb-4 rounded-lg border border-red-300 bg-red-100 px-4 py-3 text-red-800">{error}</div>
         ) : null}
 
-        <div className={compact ? 'grid grid-cols-1 gap-4 mb-5' : 'grid grid-cols-2 gap-4 mb-5'}>
+        <div className="grid grid-cols-2 gap-4 mb-5">
           {/* Large Balance Card */}
           <div className="rounded-xl shadow-lg px-6 py-8" style={{ backgroundColor: theme.cardBg, border: `2px solid ${theme.cardBorder}` }}>
             <div style={{ color: theme.muted }} className="text-sm mb-2">Total Balance</div>
