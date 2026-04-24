@@ -189,8 +189,8 @@ export default function FinanceDesignDashboard({
 
   return (
     <div className="min-h-[100dvh] overflow-x-clip" style={{ backgroundColor: theme.pageBg }}>
-      <div className={compact ? 'max-w-6xl mx-auto p-3' : 'max-w-6xl mx-auto p-4 sm:p-6'}>
-        <div className="relative flex items-start justify-between gap-4 mb-6 sm:mb-8">
+      <div className={compact ? 'max-w-6xl mx-auto px-6 py-8' : 'max-w-6xl mx-auto p-4 sm:p-6'}>
+        <div className="relative flex items-center justify-between gap-4 mb-6 sm:mb-8">
           <div className="flex items-center gap-3">
           <img
             src={isDarkMode ? '/barya-logo-dark.png' : '/barya-logo.png'}
@@ -203,7 +203,7 @@ export default function FinanceDesignDashboard({
             </h1>
           </div>
           </div>
-          <div className="relative z-40 shrink-0">
+          <div className="relative z-40 shrink-0 self-center">
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
@@ -257,8 +257,8 @@ export default function FinanceDesignDashboard({
           <div className="mb-4 rounded-lg border border-red-300 bg-red-100 px-4 py-3 text-red-800">{error}</div>
         ) : null}
 
-        <div className={compact ? 'grid grid-cols-1 gap-3 mb-6' : 'grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8'}>
-          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+        <div className={compact ? 'grid grid-cols-1 gap-5 mb-6 sm:mb-8' : 'grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8'}>
+          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Balance</span>
               <Wallet className="text-blue-500" size={20} />
@@ -268,7 +268,7 @@ export default function FinanceDesignDashboard({
             </p>
           </div>
 
-          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Income</span>
               <TrendingUp style={{ color: theme.success }} size={20} />
@@ -276,7 +276,7 @@ export default function FinanceDesignDashboard({
             <p className={compact ? 'text-2xl font-semibold' : 'text-2xl sm:text-3xl font-semibold'} style={{ color: theme.success }}>{formatCurrency(totalIncome)}</p>
           </div>
 
-          <div className={compact ? 'rounded-lg shadow-soft p-4' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
+          <div className={compact ? 'rounded-lg shadow-soft px-6 py-5' : 'rounded-lg shadow-soft p-4 sm:p-6'} style={{ backgroundColor: theme.cardBg, border: `1px solid ${theme.cardBorder}` }}>
             <div className="flex items-center justify-between mb-2">
               <span style={{ color: theme.muted }}>Total Expenses</span>
               <TrendingDown className="text-red-400" size={20} />
@@ -297,7 +297,7 @@ export default function FinanceDesignDashboard({
         </div>
 
         {showForm && (
-          <div className={compact ? 'rounded-lg shadow-soft border p-4 mb-6' : 'rounded-lg shadow-soft border p-4 sm:p-6 mb-6 sm:mb-8'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+          <div className={compact ? 'rounded-lg shadow-soft border px-6 py-5 mb-6' : 'rounded-lg shadow-soft border p-4 sm:p-6 mb-6 sm:mb-8'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
             <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>New Transaction</h2>
             <form onSubmit={handleAddTransaction}>
               <div className="mb-4">
@@ -408,7 +408,7 @@ export default function FinanceDesignDashboard({
         )}
 
         <div className={compact ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8'}>
-          <div className={compact ? 'rounded-lg shadow-soft border p-4' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+          <div className={compact ? 'rounded-lg shadow-soft border px-6 py-5' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
             <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>Expenses by Category</h2>
             {expensesByCategory.length > 0 ? (
               <ResponsiveContainer width="100%" height={chartHeight}>
@@ -434,7 +434,7 @@ export default function FinanceDesignDashboard({
             )}
           </div>
 
-          <div className={compact ? 'rounded-lg shadow-soft border p-4' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
+          <div className={compact ? 'rounded-lg shadow-soft border px-6 py-5' : 'rounded-lg shadow-soft border p-4 sm:p-6'} style={{ backgroundColor: theme.cardBgSoft, borderColor: theme.cardBorder }}>
             <h2 className={compact ? 'text-lg mb-4' : 'text-lg sm:text-xl mb-4'} style={{ color: theme.panelTitle }}>Recent Transactions</h2>
             <div className="space-y-3 max-h-96 overflow-auto">
               {normalized.slice(0, 10).map((transaction) => {
