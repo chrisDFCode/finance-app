@@ -77,13 +77,13 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-[100dvh] flex items-start justify-center px-4 py-6 sm:items-center sm:py-10"
       style={{
         background: theme.pageBg,
       }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border p-6 shadow-soft"
+        className="w-full max-w-md rounded-2xl border p-4 shadow-soft sm:p-6"
         style={{ backgroundColor: theme.cardBg, borderColor: theme.cardBorder }}
       >
         <div className="mb-3 flex justify-end">
@@ -102,12 +102,12 @@ export default function AuthPage() {
           </button>
         </div>
 
-        <div className="mb-4 flex justify-center">
-          <img src={logoSrc} alt="Barya Logo" className="h-20 w-20 object-contain" />
+        <div className="mb-3 flex justify-center sm:mb-4">
+          <img src={logoSrc} alt="Barya Logo" className="h-16 w-16 object-contain sm:h-20 sm:w-20" />
         </div>
 
-        <div className="mb-5 text-center">
-          <h1 className="text-2xl font-semibold" style={{ color: theme.text }}>
+        <div className="mb-4 text-center sm:mb-5">
+          <h1 className="text-xl font-semibold sm:text-2xl" style={{ color: theme.text }}>
             {mode === 'signup' ? 'Create your Barya account' : 'Sign in to Barya'}
           </h1>
           <p className="mt-1 text-xs" style={{ color: theme.muted }}>
@@ -123,7 +123,7 @@ export default function AuthPage() {
           <div className="mb-4 rounded border border-green-300 bg-green-100 px-3 py-2 text-sm text-green-800">{notice}</div>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div>
             <label className="mb-1 block text-sm" style={{ color: theme.muted }}>Email</label>
             <input
