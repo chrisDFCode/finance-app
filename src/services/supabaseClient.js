@@ -9,6 +9,8 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const APP_URL = import.meta.env.VITE_APP_URL || window.location.origin;
+
 async function getCurrentUserId() {
   const {
     data: { user },
@@ -27,7 +29,7 @@ export const authService = {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${APP_URL}/`,
       },
     });
 
@@ -49,7 +51,7 @@ export const authService = {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: `${APP_URL}/`,
       },
     });
 
